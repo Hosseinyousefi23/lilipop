@@ -14,18 +14,18 @@
     <form id='reserve_form' action="{% url 'event:reserve' %}" method="post">
         {% csrf_token %}
         <div id="example-basic">
-{#            <h3>Keyboard</h3>#}
-{#            <section>#}
-{#                {% for location_type in location_types %}#}
-{#                    <div class="radio_button" style="display: block"#}
-{#                         onclick="showMap('{{ location_type.backend_name }}')">#}
-{#                        <label for="{{ location_type.backend_name }}">{{ location_type.frontend_name }}</label>#}
-{#                        <input type="radio" name="location_type" id="{{ location_type.backend_name }}"#}
-{#                               value="{{ location_types.backend_name }}"#}
-{#                               style="display: inline"/>#}
-{#                    </div>#}
-{#                {% endfor %}#}
-{#            </section>#}
+            {#            <h3>Keyboard</h3>#}
+            {#            <section>#}
+            {#                {% for location_type in location_types %}#}
+            {#                    <div class="radio_button" style="display: block"#}
+            {#                         onclick="showMap('{{ location_type.backend_name }}')">#}
+            {#                        <label for="{{ location_type.backend_name }}">{{ location_type.frontend_name }}</label>#}
+            {#                        <input type="radio" name="location_type" id="{{ location_type.backend_name }}"#}
+            {#                               value="{{ location_types.backend_name }}"#}
+            {#                               style="display: inline"/>#}
+            {#                    </div>#}
+            {#                {% endfor %}#}
+            {#            </section>#}
             <h3>Effects</h3>
             <section>
                 <div id="map"></div>
@@ -36,16 +36,7 @@
             </section>
         </div>
     </form>
-    {#    <script>#}
-    {#        var map;#}
-    {#        function initMap() {#}
-    {#            map = new google.maps.Map(document.getElementById('map'), {#}
-    {#                center: {lat: -34.397, lng: 150.644},#}
-    {#                zoom: 8,#}
-    {#                streetViewControl: false#}
-    {#            });#}
-    {#        }#}
-    {#    </script>#}
+
     <script async defer
-            src="https://maps.googleapis.com/maps/api/js?callback=initMap&language=fa&v=3&libraries=drawing"></script>
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUdhNRJM-BAnT4hSvg-JHuK5vaKUzQ75Q&callback=initMap&language=fa&v=3&libraries=drawing"></script>
 {% endblock %}

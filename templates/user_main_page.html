@@ -1,7 +1,16 @@
 {% extends 'user_super_page.html' %}
+{% load static %}
 {% block title %}
     <title>Main Page</title>
 {% endblock %}
+{% block css_and_js %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/user_main_page.css' %}">
+    <script src="{% static 'js/user_main_page.js' %}"></script>
+{% endblock %}
 {% block body %}
     <h1>Welcome {{ name }}</h1>
+    <div id="map"></div>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUdhNRJM-BAnT4hSvg-JHuK5vaKUzQ75Q&callback=initMap&language=fa&v=3"></script>
 {% endblock %}

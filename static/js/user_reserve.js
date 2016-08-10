@@ -96,9 +96,10 @@ function ChooseLocationTypeControl(controlDiv, map) {
 
 }
 function initMap() {
+    var tehran = {lat: 35.715298, lng: 51.404343};
     map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: -34.397, lng: 150.644},
-        zoom: 8,
+        center: tehran,
+        zoom: 11,
         streetViewControl: false
     });
     var locationTypeControlDiv = document.createElement('div');
