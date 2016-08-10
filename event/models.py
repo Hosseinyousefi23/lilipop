@@ -38,6 +38,9 @@ class Place(models.Model):
     def code(self):
         return str(self.id) + '!!!' + self.name + '!!!' + str(self.lat) + '!!!' + str(self.lng)
 
+    def __str__(self):
+        return self.name
+
 
 class Event(models.Model):
     location_type = models.ForeignKey(LocationType)
@@ -49,6 +52,9 @@ class Event(models.Model):
         for space_time in SpaceTime.objects.filter(event=self).order_by('start_date_time'):
             data += '###' + space_time.code()
         return data
+
+    def __str__(self):
+        return 'event:' + self.location_type.backend_name
 
 
 class SpaceTime(models.Model):

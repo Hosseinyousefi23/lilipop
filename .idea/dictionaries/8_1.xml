@@ -4,6 +4,8 @@
       <w>backends</w>
       <w>beachflag</w>
       <w>clickable</w>
+      <w>curlat</w>
+      <w>curlng</w>
       <w>googleapis</w>
       <w>reserver</w>
       <w>sqlite</w>

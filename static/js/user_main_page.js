@@ -1,14 +1,64 @@
 var map;
 var data = [];
-var drawingTools = {
-    'container_gallery': function (eventData) {
-
+var circleRadius = 100;
+var drawEvent = {
+    'container_gallery': function (event) {
+        var lat = parseFloat(event.currentLocation.lat);
+        var lng = parseFloat(event.currentLocation.lng);
+        var center = {lat: lat, lng: lng};
+        var circle = new google.maps.Circle({
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35,
+            map: map,
+            center: center,
+            radius: circleRadius
+        });
     },
-    'media_mobile_unit': function (eventData) {
-
+    'mobile_media_unit': function (event) {
+        var lat = parseFloat(event.currentLocation.lat);
+        var lng = parseFloat(event.currentLocation.lng);
+        var center = {lat: lat, lng: lng};
+        var circle = new google.maps.Circle({
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35,
+            map: map,
+            center: center,
+            radius: circleRadius
+        });
+        var poly = new google.maps.Polyline({
+            strokeColor: '#000000',
+            strokeOpacity: 1.0,
+            strokeWeight: 5
+        });
+        poly.setMap(map);
+        var path = poly.getPath();
+        for (var x = 0; x < event.spaceTimes.length; x++) {
+            var curlat = parseFloat(event.spaceTimes[x].place.lat);
+            var curlng = parseFloat(event.spaceTimes[x].place.lng);
+            var latLng = new google.maps.LatLng(curlat, curlng);
+            path.push(latLng);
+        }
     },
-    'embedded_culture': function (eventData) {
-
+    'embedded_culture': function (event) {
+        var lat = parseFloat(event.currentLocation.lat);
+        var lng = parseFloat(event.currentLocation.lng);
+        var center = {lat: lat, lng: lng};
+        var circle = new google.maps.Circle({
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35,
+            map: map,
+            center: center,
+            radius: circleRadius
+        });
     }
 
 };
@@ -54,7 +104,9 @@ function initMap() {
                 var event = new MyEvent(eventId, locationType, currentLocation, spaceTimes);
                 data.push(event);
             }
-
+            for (var k = 0; k < data.length; k++) {
+                drawEvent[data[k].locationType](data[k]);
+            }
         }
     });
 }
