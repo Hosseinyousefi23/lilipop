@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import *
 from django.utils import timezone
+from geoposition.fields import GeopositionField
 
 
 class Subject(Model):
@@ -32,11 +33,10 @@ class LocationType(Model):
 
 class Place(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
-    lat = models.FloatField(max_length=100)
-    lng = models.FloatField(max_length=100)
+    position = GeopositionField(null=True)
 
     def code(self):
-        return str(self.id) + '!!!' + self.name + '!!!' + str(self.lat) + '!!!' + str(self.lng)
+        return str(self.id) + '!!!' + self.name + '!!!' + str(self.position.latitude) + '!!!' + str(self.position.longitude)
 
     def __str__(self):
         return self.name

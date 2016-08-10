@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'user',
     'main',
     'event',
+    'geoposition',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +129,6 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+GEOPOSITION_GOOGLE_MAPS_API_KEY = 'AIzaSyCUdhNRJM-BAnT4hSvg-JHuK5vaKUzQ75Q'
+GEOPOSITION_MAP_WIDGET_HEIGHT = 800
