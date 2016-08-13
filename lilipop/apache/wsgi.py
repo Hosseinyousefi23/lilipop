@@ -6,11 +6,11 @@ project = os.path.dirname(apache_configuration)
 workspace = os.path.dirname(project)
 sys.path.append(workspace)
 sys.path.append(project)
-
+# changed
 # Add the path to 3rd party django application and to django itself.
 # sys.path.append('/var/www/lilipop')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'lilipop.apache.override'
-#import django.core.handlers.wsgi
+# import django.core.handlers.wsgi
 #application = django.core.handlers.wsgi.WSGIHandler()
 from django.core.wsgi import get_wsgi_application
 
