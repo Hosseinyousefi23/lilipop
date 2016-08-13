@@ -1,8 +1,8 @@
 from django.conf.urls import url
 
-from user import views
+from userman import views
 
-app_name = 'user'
+app_name = 'userman'
 urlpatterns = [
     url(r'^signup$', views.signup, name='signup'),
     url(r'^login$', views.log_in, name='login'),

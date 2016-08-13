@@ -4,7 +4,7 @@ from django.http.response import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls.base import reverse
 
-from user.Forms import *
+from userman.Forms import *
 
 
 def signup(request):

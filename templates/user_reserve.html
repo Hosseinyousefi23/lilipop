@@ -13,6 +13,8 @@
 {% block body %}
     <form id='reserve_form' action="{% url 'event:reserve' %}" method="post">
         {% csrf_token %}
+        <input type="hidden" id="event_data" name="event_data"/>
+
         <div id="example-basic">
             {#            <h3>Keyboard</h3>#}
             {#            <section>#}

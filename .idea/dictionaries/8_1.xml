@@ -8,8 +8,10 @@
       <w>curlng</w>
       <w>geoposition</w>
       <w>googleapis</w>
+      <w>overlaycomplete</w>
       <w>reserver</w>
       <w>sqlite</w>
+      <w>userman</w>
       <w>wsgi</w>
     </words>
   </dictionary>

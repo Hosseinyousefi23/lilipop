@@ -14,6 +14,9 @@ var drawingManager;
 var data = [];
 var circleRadius = 100;
 var embeddedList = [];
+var currentMarker = null;
+var form = $('#reserve_form');
+
 var mapUI = {
 
     // should be renamed if location type names in server database renamed
@@ -81,7 +84,7 @@ function ChooseLocationTypeControl(controlDiv, map) {
     controlList.style.paddingRight = '5px';
     controlUI.appendChild(controlList);
     $.ajax({
-        url: "/event/location_types", success: function (result) {
+        url: "location_types", success: function (result) {
             var locationTypeList = result.split(',');
             for (var i = 0; i < locationTypeList.length; i++) {
                 var lisTElement = document.createElement('option');
@@ -101,7 +104,7 @@ function ChooseLocationTypeControl(controlDiv, map) {
             drawingModes: ['marker']
         },
         markerOptions: {
-            icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+            //icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
             editable: true,
             clickable: true
         }
@@ -125,19 +128,11 @@ function initMap() {
     var locationTypeControl = new ChooseLocationTypeControl(locationTypeControlDiv, map);
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(locationTypeControlDiv);
     $.ajax({
-        url: '/event/data',
+        url: 'data',
         success: function (result) {
             var eventsCode = result.split('$$$');
             for (var i = 0; i < eventsCode.length; i++) {
-                var eventData = eventsCode[i].split('###');
-                var eventId = eventData[0];
-                var locationType = eventData[1];
-                var currentLocation = createPlace(eventData[2]);
-                var spaceTimes = [];
-                for (var j = 3; j < eventData.length; j++) {
-                    spaceTimes.push(createSpaceTime(eventData[j]));
-                }
-                var event = new MyEvent(eventId, locationType, currentLocation, spaceTimes);
+                var event = createEvent(eventsCode[i]);
                 data.push(event);
             }
             for (var x = 0; x < data.length; x++) {
@@ -159,6 +154,21 @@ function initMap() {
             }
         }
     });
+    google.maps.event.addListener(drawingManager, 'overlaycomplete', function (event) {
+            console.log(event.type);
+            if (event.type == 'marker') {
+                if (currentMarker != null) {
+                    currentMarker.setMap(null);
+                }
+                currentMarker = event.overlay;
+
+
+            } else if (event.type == 'polygon') {
+                //TODO polygon?
+            }
+
+        }
+    )
 }
 
 function Place(id, placeName, lat, lng) {
@@ -173,12 +183,14 @@ function SpaceTime(place, startDateTime, endDateTime) {
     this.startDateTime = startDateTime;
     this.endDateTime = endDateTime;
 }
+
 function MyEvent(id, locationType, currentLocation, spaceTimes) {
     this.id = id;
     this.locationType = locationType;
     this.currentLocation = currentLocation;
     this.spaceTimes = spaceTimes;
 }
+
 function createPlace(placeData) {
     var listData = placeData.split('!!!');
     var id = listData[0];
@@ -194,6 +206,18 @@ function createSpaceTime(spaceTimeData) {
     var startDateTime = spaceTimeList[1];
     var endDateTime = spaceTimeList[2];
     return new SpaceTime(place, startDateTime, endDateTime);
+}
+
+function createEvent(eventCode) {
+    var eventData = eventCode.split('###');
+    var eventId = eventData[0];
+    var locationType = eventData[1];
+    var currentLocation = createPlace(eventData[2]);
+    var spaceTimes = [];
+    for (var j = 3; j < eventData.length; j++) {
+        spaceTimes.push(createSpaceTime(eventData[j]));
+    }
+    return new MyEvent(eventId, locationType, currentLocation, spaceTimes);
 }
 
 //function showMap(locationType) {
