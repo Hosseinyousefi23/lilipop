@@ -89,7 +89,7 @@ function initMap() {
         streetViewControl: false
     });
     $.ajax({
-        url: 'data',
+        url: 'event/data',
         success: function (result) {
             var eventsCode = result.split('$$$');
             for (var i = 0; i < eventsCode.length; i++) {

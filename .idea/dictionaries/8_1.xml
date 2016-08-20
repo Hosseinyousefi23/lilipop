@@ -4,13 +4,19 @@
       <w>backends</w>
       <w>beachflag</w>
       <w>clickable</w>
+      <w>crosshair</w>
       <w>curlat</w>
       <w>curlng</w>
       <w>geoposition</w>
       <w>googleapis</w>
+      <w>mousedown</w>
+      <w>mousemove</w>
       <w>overlaycomplete</w>
       <w>reserver</w>
+      <w>rightclick</w>
+      <w>roboto</w>
       <w>sqlite</w>
+      <w>stylers</w>
       <w>userman</w>
       <w>wsgi</w>
     </words>

@@ -1,83 +1,81 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import *
 from django.utils import timezone
 from geoposition.fields import GeopositionField
 
 
-class Subject(Model):
-    name = CharField(max_length=100)
+class Subject(models.Model):
+    name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
 
 
-class Reserve(Model):
-    address = CharField(max_length=100)
-    time = DateTimeField(default=timezone.now)
-    subject = ForeignKey(Subject)
-    reserver_name = CharField(max_length=100)
-    reserver_email = EmailField()
-    reserver_phone = CharField(max_length=20)
+class Facility(models.Model):
+    name = models.CharField(max_length=100)
 
 
-class LocationType(Model):
+class SpaceTimePoint(models.Model):
+    position = GeopositionField()
+    time_spot = models.DateTimeField(default=timezone.now)
+
+
+class Location(models.Model):
+    position = GeopositionField()
+
+
+class PlaceType(models.Model):
     # There are 3 types so far: Container gallery (container_gallery) , Mobile media unit (mobile_media_unit) ,
     # Embedded culture (embedded_culture)
-    frontend_name = CharField(max_length=100)
-    backend_name = CharField(max_length=100)
+    frontend_name = models.CharField(max_length=100)
+    backend_name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.backend_name
 
 
-class Place(models.Model):
-    name = models.CharField(max_length=100, null=True, blank=True)
-    position = GeopositionField(null=True)
+class Proposal(models.Model):
+    place_type = models.ForeignKey(PlaceType)
+    submission_time = models.DateTimeField(default=timezone.now)
+    description = models.CharField(max_length=1000)
+    subject = models.ForeignKey(Subject)
+    owner = models.ForeignKey(User)
+    extra_facilities = models.ManyToManyField(Facility)
+    area_point_set = models.ManyToManyField(Location)  # Polygon points for MM units and single point for other
 
-    def code(self):
-        return str(self.id) + '!!!' + self.name + '!!!' + str(self.position.latitude) + '!!!' + str(self.position.longitude)
+
+class Place(models.Model):
+    type = models.ForeignKey(PlaceType)
+    name = models.CharField(max_length=100, null=True, blank=True)
+    locations = models.ManyToManyField(SpaceTimePoint)
+    current_location = GeopositionField()
 
     def __str__(self):
         return self.name
 
-
-class Event(models.Model):
-    location_type = models.ForeignKey(LocationType)
-    owner = models.ForeignKey(User)
-    current_place = models.ForeignKey(Place, null=True)
-
-    def code(self):
-        data = str(self.id) + '###' + self.location_type.backend_name + '###' + self.current_place.code()
-        for space_time in SpaceTime.objects.filter(event=self).order_by('start_date_time'):
-            data += '###' + space_time.code()
-        return data
-
-    def __str__(self):
-        return 'event:' + self.location_type.backend_name
+    def location(self, time=timezone.now):
+        pass
 
 
-class SpaceTime(models.Model):
-    place = models.ForeignKey(Place)
-    start_date_time = models.DateTimeField(null=True)
-    end_date_time = models.DateTimeField(null=True)
-    event = models.ForeignKey(Event, null=True)
-
-    def code(self):
-        return self.place.code() + '@@@' + str(self.start_date_time) + '@@@' + str(
-            self.end_date_time)
-
-
-class Image(models.Model):
-    image_field = models.ImageField(upload_to='image/%Y/%m/%d/')
-    space_time = models.ForeignKey(SpaceTime, null=True)
-
-
-class Video(models.Model):
-    video_field = models.FileField(upload_to='video/%Y/%m/%d/')
-    space_time = models.ForeignKey(SpaceTime, null=True)
+class File(models.Model):
+    file_field = models.FileField(upload_to='files/%Y/%m/%d/')
 
 
 class Text(models.Model):
     text_field = models.CharField(max_length=2000)
-    space_time = models.ForeignKey(SpaceTime, null=True)
+
+
+class Event(models.Model):
+    unique_code = models.CharField(max_length=100)
+    proposal = models.ForeignKey(Proposal)
+    place = models.ForeignKey(Place)
+    owner = models.ForeignKey(User)
+    area_point_set = models.ManyToManyField(Location)
+    # gps_location_data = models.ManyToManyField(SpaceTimePoint)
+    files = models.ManyToManyField(File)
+    texts = models.ManyToManyField(Text)
+    # time start and end
+    # hours per day
+
+    def __str__(self):
+        return 'event:' + self.unique_code
