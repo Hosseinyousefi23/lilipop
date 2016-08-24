@@ -8,7 +8,6 @@ $(document).ready(function () {
         stepsOrientation: "vertical",
         onFinished: function () {
             document.getElementById('reserve_form').submit();
-            console.log('finish');
         }
     });
 });
@@ -62,7 +61,8 @@ var mapUI = {
                 position: event.latLng,
                 map: map,
                 animation: google.maps.Animation.DROP,
-                draggable: true
+                draggable: true,
+                icon: '/static/icons/map/container_gallery.png'
             });
             locations.push({lat: event.latLng.lat(), lng: event.latLng.lng()});
             if (!showDone) {
@@ -165,7 +165,7 @@ var mapUI = {
     },
     'smart_furniture': function () {
         for (var i = 0; i < embeddedList.length; i++) {
-            embeddedList[i].setMap(map);
+            embeddedList[i].setOptions({map: map});
         }
         for (var j = 0; j < listeners.length; j++) {
             google.maps.event.removeListener(listeners[j])
@@ -182,18 +182,20 @@ var mapUI = {
             currentPolygon.setMap(null);
             currentPolygon = null;
         }
-        for (var k = 0; k < embeddedList.length; k++) {
-            google.maps.event.addListener(embeddedList[k], function () {
-                embeddedList[k].setOptions({
-                    strokeColor: '#FF0000',
-                    strokeOpacity: 0.8,
-                    strokeWeight: 2,
-                    fillColor: '#FF0000',
-                    fillOpacity: 0.35,
-                    center: center,
-                    radius: circleRadius
+        for (var l = 0; l < embeddedList.length; l++) {
+            google.maps.event.addListener(embeddedList[l], 'click', function () {
+                for (var x = 0; x < embeddedList.length; x++) {
+                    embeddedList[x].setOptions({
+                        icon: '/static/icons/map/smart_furniture_deselected.png'
+                    });
+                }
+                locations = [{lat: this.position.lat(), lng: this.position.lng()}];
+                this.setOptions({
+                    icon: '/static/icons/map/smart_furniture.png'
                 });
-                showDone
+                if (!showDone) {
+                    showDoneButton();
+                }
             });
         }
     }
@@ -321,40 +323,34 @@ function initMap() {
     var locationTypeControl = new ChooseLocationTypeControl(locationTypeControlDiv, map);
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(locationTypeControlDiv);
     $.ajax({
-            url: 'data',
+            url: 'data?request=places&place_type=smart_furniture',
             success: function (result) {
-                events = JSON.parse(result['events']);
                 places = JSON.parse(result['places']);
-                placeTypes = JSON.parse(result['place_types']);
-                console.log(events);
                 console.log(places);
-                console.log(placeTypes);
                 for (var i = 0; i < places.length; i++) {
-                    var placeType = findPlaceTypeFromPlaceIndex(i);
-                    if (placeType.fields.backend_name == 'smart_furniture') {
-                        var center = findLatlngFromPlaceIndex(i);
+                    $.ajax({
+                        url: 'data?request=location&place=' + places[i].pk,
+                        success: function (result) {
+                            var location = locationParse(result);
+                            var marker = new google.maps.Marker({
+                                position: location,
+                                animation: google.maps.Animation.DROP,
+                                icon: '/static/icons/map/smart_furniture_deselected.png'
+                            });
+                            embeddedList.push(marker);
+                        }
+                    });
 
-                        var marker = new google.maps.Marker({
-                            position: center,
-                            map: map,
-                            animation: google.maps.Animation.DROP,
-                            icon: 'static/icons/map/smart_furniture.png'
-                        });
-                        embeddedList.push(circle);
-                    }
+
                 }
             }
         }
-    )
-    ;
+    );
     createDoneButton();
     createCancelButton();
 
 }
 
-function MyEvent(locations) {
-    this.locations = locations;
-}
 
 function findPlaceFromEventIndex(index) { // finding place object from event index
     for (var i = 0; i < places.length; i++) {
@@ -492,4 +488,9 @@ function showCancelButton() {
 function showDoneButton() {
     map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(doneButtonDiv);
     showDone = true;
+}
+
+function locationParse(string) {
+    var data = string.split(',');
+    return new google.maps.LatLng(parseFloat(data[0]), parseFloat(data[1]));
 }

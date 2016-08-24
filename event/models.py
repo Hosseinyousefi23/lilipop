@@ -15,15 +15,6 @@ class Facility(models.Model):
     name = models.CharField(max_length=100)
 
 
-class SpaceTimePoint(models.Model):
-    position = GeopositionField()
-    time_spot = models.DateTimeField(default=timezone.now)
-
-
-class Location(models.Model):
-    position = GeopositionField()
-
-
 class PlaceType(models.Model):
     # There are 3 types so far: Container gallery (container_gallery) , Mobile media unit (mobile_media_unit) ,
     # Embedded culture (embedded_culture)
@@ -34,35 +25,41 @@ class PlaceType(models.Model):
         return self.backend_name
 
 
+class Place(models.Model):
+    type = models.ForeignKey(PlaceType)
+    name = models.CharField(max_length=100, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    def location(self, time=timezone.now):
+        data = SpaceTimePoint.objects.filter(place=self, time_spot__lte=time).order_by('-time_spot').values()[0]
+        return str(data['position'])
+
+    def location_set(self, from_time, to_time):
+        data = SpaceTimePoint.objects.filter(place=self, time_spot__gte=from_time, time_spot__lte=to_time).order_by(
+            'time_spot')
+        return data
+
+
+class SpaceTimePoint(models.Model):
+    position = GeopositionField()
+    time_spot = models.DateTimeField(default=timezone.now)
+    place = models.ForeignKey(Place)
+
+
 class Proposal(models.Model):
     place_type = models.ForeignKey(PlaceType)
     submission_time = models.DateTimeField(default=timezone.now)
     description = models.CharField(max_length=1000)
     subject = models.ForeignKey(Subject)
     owner = models.ForeignKey(User)
-    extra_facilities = models.ManyToManyField(Facility)
-    area_point_set = models.ManyToManyField(Location)  # Polygon points for MM units and single point for other
+    extra_facilities = models.ManyToManyField(Facility, blank=True)
 
 
-class Place(models.Model):
-    type = models.ForeignKey(PlaceType)
-    name = models.CharField(max_length=100, null=True, blank=True)
-    locations = models.ManyToManyField(SpaceTimePoint)
-    current_location = GeopositionField()
-
-    def __str__(self):
-        return self.name
-
-    def location(self, time=timezone.now):
-        pass
-
-
-class File(models.Model):
-    file_field = models.FileField(upload_to='files/%Y/%m/%d/')
-
-
-class Text(models.Model):
-    text_field = models.CharField(max_length=2000)
+class ProposalLocation(models.Model):
+    position = GeopositionField()
+    proposal = models.ForeignKey(Proposal, related_name='area_point_set')
 
 
 class Event(models.Model):
@@ -70,12 +67,39 @@ class Event(models.Model):
     proposal = models.ForeignKey(Proposal)
     place = models.ForeignKey(Place)
     owner = models.ForeignKey(User)
-    area_point_set = models.ManyToManyField(Location)
-    # gps_location_data = models.ManyToManyField(SpaceTimePoint)
-    files = models.ManyToManyField(File)
-    texts = models.ManyToManyField(Text)
-    # time start and end
-    # hours per day
+    startDateTime = models.DateTimeField()
+    endDateTime = models.DateTimeField()
+    image = models.ImageField(upload_to='files/%Y/%m/%d/', null=True)
 
     def __str__(self):
         return 'event:' + self.unique_code
+
+
+class Schedule(models.Model):
+    day = models.CharField(choices=(
+        ('saturday', 'Saturday'),
+        ('sunday', 'Sunday'),
+        ('monday', 'Monday'),
+        ('tuesday', 'Tuesday'),
+        ('wednesday', 'Wednesday'),
+        ('thursday', 'Thursday'),
+        ('friday', 'Friday'),
+    ), max_length=100)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    event = models.ForeignKey(Event)
+
+
+class File(models.Model):
+    file_field = models.FileField(upload_to='files/%Y/%m/%d/')
+    event = models.ForeignKey(Event, related_name='files')
+
+
+class Text(models.Model):
+    text_field = models.CharField(max_length=2000)
+    event = models.ForeignKey(Event, related_name='texts')
+
+
+class EventLocation(models.Model):
+    location = GeopositionField()
+    event = models.ForeignKey(Event, related_name='area_point_set')
