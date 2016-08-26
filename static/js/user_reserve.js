@@ -19,7 +19,6 @@ var currentMarker = null;
 var doneButtonDiv = null;
 var cancelButtonDiv = null;
 var showDone = false;
-var form = $('#reserve_form');
 var locations = [];
 var listeners = [];
 var polygonComplete = false;
@@ -165,7 +164,7 @@ var mapUI = {
     },
     'smart_furniture': function () {
         for (var i = 0; i < embeddedList.length; i++) {
-            embeddedList[i].setOptions({map: map});
+            embeddedList[i].setOptions({map: map, icon: '/static/icons/map/smart_furniture_deselected.png'});
         }
         for (var j = 0; j < listeners.length; j++) {
             google.maps.event.removeListener(listeners[j])
@@ -331,10 +330,9 @@ function initMap() {
                     $.ajax({
                         url: 'data?request=location&place=' + places[i].pk,
                         success: function (result) {
-                            var location = locationParse(result);
+                            var location = locationParse(result['location']);
                             var marker = new google.maps.Marker({
                                 position: location,
-                                animation: google.maps.Animation.DROP,
                                 icon: '/static/icons/map/smart_furniture_deselected.png'
                             });
                             embeddedList.push(marker);
@@ -491,6 +489,7 @@ function showDoneButton() {
 }
 
 function locationParse(string) {
+    console.log(string);
     var data = string.split(',');
     return new google.maps.LatLng(parseFloat(data[0]), parseFloat(data[1]));
 }

@@ -1,8 +1,10 @@
+import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
-from django.utils import dateparse, timezone
+from django.utils import timezone
 
 from event.Forms import ReserveForm
 from event.models import PlaceType, Event, Place
@@ -49,8 +51,8 @@ def send_data(request):
         place_id = int(request.GET['place'])
         place = Place.objects.get(id=place_id)
         if 'time' in request.GET:
-            time_string = request.GET['time']
-            time_obj = dateparse.parse_datetime(time_string)
+            time_milliseconds = int(request.GET['time'])
+            time_obj = datetime.datetime.fromtimestamp(time_milliseconds / 1000.0)
             location = place.location(time_obj)
             return JsonResponse(
                 {'location': str(location), 'place_type': place.type.backend_name, 'place_id': place_id})
@@ -61,11 +63,21 @@ def send_data(request):
     elif request.GET['request'] == 'location_set':
         place_id = int(request.GET['place'])
         place = Place.objects.get(pk=place_id)
-        from_time = dateparse.parse_datetime(request.GET['from'])
-        to_time = dateparse.parse_datetime(request.GET['to'])
+        from_time_milliseconds = int(request.GET['from'])
+        to_time_milliseconds = int(request.GET['to'])
+        from_time = datetime.datetime.fromtimestamp(from_time_milliseconds / 1000.0)
+        to_time = datetime.datetime.fromtimestamp(to_time_milliseconds / 1000.0)
         return JsonResponse({
             'location_set': serializers.serialize('json', place.location_set(from_time, to_time))
         })
+    elif request.GET['request'] == 'current_events':
+        selected_time_milliseconds = int(request.GET['time'])
+        selected_time = datetime.datetime.fromtimestamp(selected_time_milliseconds / 1000.0)
+        place_id = int(request.GET['place'])
+        place = Place.objects.get(pk=place_id)
+        events = Event.objects.filter(place=place, startDateTime__lte=selected_time, endDateTime__gte=selected_time)
+        return JsonResponse({'events': serializers.serialize('json', events), 'place_id': place_id})
+
     elif request.GET['request'] == 'events':
         place_id = int(request.GET['place'])
         place = Place.objects.get(id=place_id)

@@ -1,16 +1,35 @@
-{% extends 'user_super_page.html' %}
 {% load static %}
-{% block title %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
     <title>Main Page</title>
-{% endblock %}
-{% block css_and_js %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <link rel="stylesheet" href="{% static 'css/user_main_page.css' %}">
     <script src="{% static 'js/user_main_page.js' %}"></script>
-{% endblock %}
-{% block body %}
-    <h1>Welcome {{ name }}</h1>
-    <div id="map"></div>
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUdhNRJM-BAnT4hSvg-JHuK5vaKUzQ75Q&callback=initMap&language=fa&v=3"></script>
-{% endblock %}
+</head>
+<body>
+
+<div id="mySidenav" class="sidenav" dir="rtl" onclick="deselectMenuItems()">
+    <div id="closebtndiv">
+        <a href="javascript:void(0)" id="closebtn" onclick="closeNav()">&times;</a>
+    </div>
+    <div id="menudiv">
+        <a id="reserve_link" onclick="showReserve(event)">Reserve</a>
+        <a id="aboutus_link" onclick="showAboutUS(event)">About us</a>
+        <a href="{% url 'userman:logout' %}">Logout</a>
+    </div>
+</div>
+<div class="sidenav" id="reserve_div" dir="rtl">
+
+</div>
+<div class="sidenav" id="aboutus_div" dir="rtl">
+
+</div>
+<span onclick="openNav()">open</span>
+
+<div id="map"></div>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUdhNRJM-BAnT4hSvg-JHuK5vaKUzQ75Q&callback=initMap&language=fa&v=3"></script>
+</body>
+</html>

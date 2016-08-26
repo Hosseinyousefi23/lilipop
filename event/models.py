@@ -64,6 +64,7 @@ class ProposalLocation(models.Model):
 
 class Event(models.Model):
     unique_code = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
     proposal = models.ForeignKey(Proposal)
     place = models.ForeignKey(Place)
     owner = models.ForeignKey(User)
@@ -88,6 +89,9 @@ class Schedule(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
     event = models.ForeignKey(Event)
+
+    class Meta:
+        unique_together = (("day", "event"),)
 
 
 class File(models.Model):

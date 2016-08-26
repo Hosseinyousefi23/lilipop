@@ -1,6 +1,7 @@
 <component name="ProjectDictionaryState">
   <dictionary name="8.1">
     <words>
+      <w>aboutus</w>
       <w>backends</w>
       <w>beachflag</w>
       <w>clickable</w>
@@ -11,14 +12,18 @@
       <w>googleapis</w>
       <w>mousedown</w>
       <w>mousemove</w>
+      <w>mouseout</w>
+      <w>mouseover</w>
       <w>overlaycomplete</w>
       <w>reserver</w>
       <w>rightclick</w>
       <w>roboto</w>
       <w>sqlite</w>
       <w>stylers</w>
+      <w>tuic</w>
       <w>userman</w>
       <w>wsgi</w>
+      <w>zoomout</w>
     </words>
   </dictionary>
 </component>

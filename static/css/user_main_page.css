@@ -1,9 +1,75 @@
 html, body {
     height: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 #map {
-    height: 100%;
-    margin-left: 50px;
-    margin-right: 50px;
+    height: 98%;
+    margin: 0;
+    padding: 0;
 }
+
+.sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0;
+    background-color: #F2F2F2; /* rgb: 242 242 242 */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 20px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    white-space: nowrap;
+    box-shadow: -1px 0 10px #666666;
+}
+
+#mySidenav {
+    right: 0;
+}
+
+/* The navigation menu links */
+#mySidenav a {
+    text-decoration: none;
+    /*font-size: 25px;*/
+    color: #818181;
+    display: block;
+    transition: color 0.3s, background-color 0.4s;
+
+}
+
+/* When you mouse over the navigation links, change their color */
+#mySidenav a:hover {
+    color: #000000
+}
+
+#closebtndiv {
+    border-bottom: solid #e1e1e1 2px;
+}
+
+/* Position and style the close button (top right corner) */
+#closebtn {
+    margin-right: 20px;
+    font-size: 4em;
+    /*border: none;*/
+}
+
+#menudiv a {
+
+    border-bottom: solid #e1e1e1 1px;
+    padding-right: 20px;
+    font-size: 25px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    /*border-top: solid transparent 3px;*/
+
+}
+
+#reserve_div {
+    right: 200px;
+}
+
+#aboutus_div {
+    right: 200px;
+}
+
