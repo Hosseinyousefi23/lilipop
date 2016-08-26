@@ -67,9 +67,27 @@ html, body {
 
 #reserve_div {
     right: 200px;
+
 }
 
 #aboutus_div {
     right: 200px;
+}
+
+.form_part {
+    margin-right: 30px;
+}
+
+#select_place_div {
+
+}
+
+#select_place_div h2 {
+    display: inline;
+}
+
+#select_place_div img {
+    display: inline;
+    width: 100px;
 }
 

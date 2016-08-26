@@ -5,6 +5,7 @@ var selectedTime = new Date().getTime();
 var selectedMenuItem;
 var selectedMenuDiv;
 markers = [];
+var mapClickMenuListener;
 var drawPlace = {
     'container_gallery': function (position, place_id) {
         var marker = new google.maps.Marker({
@@ -58,24 +59,6 @@ var drawPlace = {
 
 };
 
-//function Place(id, placeName, lat, lng) {
-//    this.id = id;
-//    this.placeName = placeName;
-//    this.lat = lat;
-//    this.lng = lng;
-//}
-//
-//function SpaceTime(place, startDateTime, endDateTime) {
-//    this.place = place;
-//    this.startDateTime = startDateTime;
-//    this.endDateTime = endDateTime;
-//}
-//function MyEvent(id, locationType, currentLocation, spaceTimes) {
-//    this.id = id;
-//    this.locationType = locationType;
-//    this.currentLocation = currentLocation;
-//    this.spaceTimes = spaceTimes;
-//}
 function initMap() {
     var tehran = {lat: 35.715298, lng: 51.404343};
     map = new google.maps.Map(document.getElementById('map'), {
@@ -129,6 +112,7 @@ function initMap() {
     });
     addTuicLogo();
     addProjectLogo();
+    addMenuIcon();
     draw(null);
     addZoomListener();
 }
@@ -184,7 +168,16 @@ function addProjectLogo() {
     controlUI.appendChild(image);
     map.controls[google.maps.ControlPosition.LEFT_TOP].push(controlUI);
 }
-
+function addMenuIcon() {
+    var menuIcon = document.createElement('img');
+    menuIcon.style.marginRight = '25px';
+    menuIcon.style.marginTop = '40px';
+    menuIcon.style.width = '30px';
+    menuIcon.style.cursor = 'pointer';
+    menuIcon.setAttribute('src', '/static/icons/map/menu.png');
+    menuIcon.setAttribute('onclick', 'openNav()');
+    map.controls[google.maps.ControlPosition.RIGHT_TOP].push(menuIcon);
+}
 function addMarkerListeners(marker) {
     google.maps.event.addListener(marker, 'mouseover', function () {
         var place_id = this.place_id;
@@ -239,11 +232,26 @@ function addZoomListener() {
 
 function openNav() {
     document.getElementById("mySidenav").style.width = "200px";
+    mapClickMenuListener = map.addListener('click', closeNav);
 }
 
+function closeButton(event) {
+    event.stopPropagation();
+    closeNav();
+}
 /* Set the width of the side navigation to 0 */
 function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
+    if (selectedMenuDiv) {
+        deselectMenuItems();
+        setTimeout(function () {
+            document.getElementById("mySidenav").style.width = "0";
+        }, 500);
+    } else {
+        document.getElementById("mySidenav").style.width = "0";
+    }
+    google.maps.event.removeListener(mapClickMenuListener);
+    mapClickMenuListener = null;
+
 }
 
 function showReserve(event) {
@@ -258,12 +266,18 @@ function showReserve(event) {
     selectedMenuItem = reserveLink;
     reserveLink.style.backgroundColor = '#6DCFF6';
     reserveLink.style.borderStyle = 'inset';
+    var reserveDiv = document.getElementById('reserve_div');
     if (selectedMenuDiv) {
         selectedMenuDiv.style.width = '0';
+        selectedMenuDiv = reserveDiv;
+        setTimeout(function () {
+            reserveDiv.style.width = '600px';
+        }, 500);
+    } else {
+        selectedMenuDiv = reserveDiv;
+        reserveDiv.style.width = '600px';
     }
-    var reserveDiv = document.getElementById('reserve_div');
-    selectedMenuDiv = reserveDiv;
-    reserveDiv.style.width = '600px';
+
 }
 
 function showAboutUS(event) {
@@ -278,12 +292,19 @@ function showAboutUS(event) {
     selectedMenuItem = aboutusLink;
     aboutusLink.style.backgroundColor = '#6DCFF6';
     aboutusLink.style.borderStyle = 'inset';
+    var aboutusDiv = document.getElementById('aboutus_div');
     if (selectedMenuDiv) {
         selectedMenuDiv.style.width = '0';
+        selectedMenuDiv = aboutusDiv;
+        setTimeout(function () {
+            aboutusDiv.style.width = '400px';
+        }, 500);
+    } else {
+        selectedMenuDiv = aboutusDiv;
+        aboutusDiv.style.width = '400px';
     }
-    var aboutusDiv = document.getElementById('aboutus_div');
-    selectedMenuDiv = aboutusDiv;
-    aboutusDiv.style.width = '400px';
+
+
     //aboutusLink.style.color = '#000000';
 }
 
@@ -299,19 +320,3 @@ function deselectMenuItems() {
     selectedMenuDiv = null;
     selectedMenuItem = null;
 }
-//function createPlace(placeData) {
-//    var listData = placeData.split('!!!');
-//    var id = listData[0];
-//    var placeName = listData[1];
-//    var lat = listData[2];
-//    var lng = listData[3];
-//    return new Place(id, placeName, lat, lng);
-//}
-//
-//function createSpaceTime(spaceTimeData) {
-//    var spaceTimeList = spaceTimeData.split('@@@');
-//    var place = createPlace(spaceTimeList[0]);
-//    var startDateTime = spaceTimeList[1];
-//    var endDateTime = spaceTimeList[2];
-//    return new SpaceTime(place, startDateTime, endDateTime);
-//}
