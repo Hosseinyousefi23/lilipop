@@ -173,6 +173,7 @@ var mapUI = {
             removeDoneAndCancelButton();
         }
         listeners = [];
+        map.setOptions({draggableCursor: null});
         if (currentMarker) {
             currentMarker.setMap(null);
             currentMarker = null;
@@ -322,57 +323,32 @@ function initMap() {
     var locationTypeControl = new ChooseLocationTypeControl(locationTypeControlDiv, map);
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(locationTypeControlDiv);
     $.ajax({
-            url: 'data?request=places&place_type=smart_furniture',
-            success: function (result) {
-                places = JSON.parse(result['places']);
-                console.log(places);
-                for (var i = 0; i < places.length; i++) {
-                    $.ajax({
-                        url: 'data?request=location&place=' + places[i].pk,
-                        success: function (result) {
-                            var location = locationParse(result['location']);
-                            var marker = new google.maps.Marker({
-                                position: location,
-                                icon: '/static/icons/map/smart_furniture_deselected.png'
-                            });
-                            embeddedList.push(marker);
-                        }
-                    });
+        url: 'data?request=places&place_type=smart_furniture',
+        success: function (result) {
+            var places = JSON.parse(result['places']);
+            console.log(places);
+            for (var i = 0; i < places.length; i++) {
+                $.ajax({
+                    url: 'data?request=location&place=' + places[i].pk,
+                    success: function (result) {
+                        var location = locationParse(result['location']);
+                        var marker = new google.maps.Marker({
+                            position: location,
+                            icon: '/static/icons/map/smart_furniture_deselected.png'
+                        });
+                        embeddedList.push(marker);
+                    }
+                });
 
 
-                }
             }
         }
-    );
+    });
     createDoneButton();
     createCancelButton();
 
 }
 
-
-function findPlaceFromEventIndex(index) { // finding place object from event index
-    for (var i = 0; i < places.length; i++) {
-        if (events[index].fields.place == places[i].pk) {
-            return places[i];
-        }
-    }
-}
-
-function findLatlngFromPlaceIndex(index) { // finding latlng object from place index
-    var locationString = places[index].fields.locations;
-    var latlngString = locationString.split(',');
-    var lat = parseFloat(latlngString[0]);
-    var lng = parseFloat(latlngString[1]);
-    return new google.maps.LatLng(lat, lng);
-}
-
-function findPlaceTypeFromPlaceIndex(index) {
-    for (var i = 0; i < placeTypes.length; i++) {
-        if (places[index].fields.type == placeTypes[i].pk) {
-            return placeTypes[i];
-        }
-    }
-}
 
 function startDeleteMenu() {
     function DeleteMenu() {

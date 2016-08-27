@@ -10,26 +10,47 @@
 </head>
 <body>
 
-<div id="mySidenav" class="sidenav" dir="rtl" onclick="deselectMenuItems()">
+<div id="menu" class="sidenav" dir="rtl" onclick="menu.closeSubMenu()">
     <div id="closebtndiv">
-        <a href="javascript:void(0)" id="closebtn" onclick="closeButton(event)"><b>&times;</b></a>
+        <a href="javascript:void(0)" id="closebtn" onclick="menu.closeButton(event)"><b>&times;</b></a>
     </div>
     <div id="menudiv">
-        <a id="reserve_link" onclick="showReserve(event)">Reserve</a>
-        <a id="aboutus_link" onclick="showAboutUS(event)">About us</a>
+        <a id="reserve_link" onclick="menu.openReserveMenu(event)">Reserve</a>
+        <a id="aboutus_link" onclick="menu.openAboutusMenu(event)">About us</a>
         <a href="{% url 'userman:logout' %}">Logout</a>
+    </div>
+    <div id="links">
+        <a href="#"><img src="{% static 'icons/menu/youtube.png' %}" width="25px"/></a>
+        <a href="#"><img src="{% static 'icons/menu/twitter.png' %}" width="25px"/></a>
+        <a href="#"><img src="{% static 'icons/menu/linkedin.png' %}" width="25px"/></a>
+        <a href="#"><img src="{% static 'icons/menu/instagram.png' %}" width="25px"/></a>
+        <a href="#"><img src="{% static 'icons/menu/facebook.png' %}" width="25px"/></a>
     </div>
 </div>
 <div class="sidenav" id="reserve_div" dir="rtl">
     <form>
         <div id="select_place_div" class="form_part">
             <h2>Place</h2>
-            <img src="{% static 'icons/menu/container_gallery.png' %}"/>
-            <img src="{% static 'icons/menu/mobile_media_unit.png' %}"/>
-            <img src="{% static 'icons/menu/smart_furniture.png' %}"/>
+
+            <div id="place_images">
+                <img name='container_gallery' src="{% static 'icons/menu/container_gallery.png' %}"
+                     onclick="menu.selectPlace(this)"/>
+                <img name='mobile_media_unit' src="{% static 'icons/menu/mobile_media_unit.png' %}"
+                     onclick="menu.selectPlace(this)"/>
+                <img name='smart_furniture' src="{% static 'icons/menu/smart_furniture.png' %}"
+                     onclick="menu.selectPlace(this)"/>
+            </div>
+            <input type="hidden" name="place_type" id="place_type_input"/>
+            <br style="clear: both"/>
         </div>
         <div id="select_location_div" class="form_part">
             <h2>Location</h2>
+
+            <div id="location_image">
+                <img src="{% static 'icons/menu/location.png' %}" onclick="showReserveUI()" id="location_img"/>
+            </div>
+            <input type="hidden" name="locations" id="locations_input"/>
+            <br style="clear: both"/>
         </div>
         <div id="select_time_div" class="form_part">
             <h2>Time</h2>

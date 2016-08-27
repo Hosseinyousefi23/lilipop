@@ -5,7 +5,7 @@ html, body {
 }
 
 #map {
-    height: 98%;
+    height: 100%;
     margin: 0;
     padding: 0;
 }
@@ -16,7 +16,7 @@ html, body {
     position: fixed; /* Stay in place */
     z-index: 1; /* Stay on top */
     top: 0;
-    background-color: #F2F2F2; /* rgb: 242 242 242 */
+    background-color: #F6F6F6; /* rgb: 242 242 242 */
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 20px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
@@ -24,22 +24,23 @@ html, body {
     box-shadow: -1px 0 10px #666666;
 }
 
-#mySidenav {
+#menu {
     right: 0;
 }
 
 /* The navigation menu links */
-#mySidenav a {
+#menu a {
     text-decoration: none;
     /*font-size: 25px;*/
     color: #818181;
     display: block;
     transition: color 0.3s, background-color 0.4s;
+    cursor: pointer;
 
 }
 
 /* When you mouse over the navigation links, change their color */
-#mySidenav a:hover {
+#menu a:hover {
     color: #000000
 }
 
@@ -61,12 +62,14 @@ html, body {
     font-size: 25px;
     padding-top: 20px;
     padding-bottom: 20px;
+
     /*border-top: solid transparent 3px;*/
 
 }
 
 #reserve_div {
     right: 200px;
+    padding-top: 100px;
 
 }
 
@@ -75,19 +78,76 @@ html, body {
 }
 
 .form_part {
-    margin-right: 30px;
+    margin-right: 55px;
 }
 
 #select_place_div {
-
+    margin-bottom: 30px;
 }
 
 #select_place_div h2 {
-    display: inline;
+    width: 40%;
+    float: right;
+    margin-top: 25px;
 }
 
 #select_place_div img {
     display: inline;
-    width: 100px;
+    width: 90px;
+    cursor: pointer;
 }
 
+#links {
+    position: absolute;
+    right: 7px;
+    bottom: 30px;
+}
+
+#links a {
+    display: inline;
+    margin: 4px;
+}
+
+#links img {
+    display: inline;
+}
+
+#place_images {
+    width: 54%;
+    float: right;
+}
+
+#location_image {
+    width: 40%;
+    float: right;
+}
+
+#location_image img {
+    width: 90px;
+    cursor: pointer;
+}
+
+#select_location_div h2 {
+    float: right;
+    width: 40%;
+    margin-top: 22px;
+}
+
+.delete-menu {
+    position: absolute;
+    background: white;
+    padding: 3px;
+    color: #666;
+    font-weight: bold;
+    border: 1px solid #999;
+    font-family: sans-serif;
+    font-size: 12px;
+    box-shadow: 1px 3px 3px rgba(0, 0, 0, .3);
+    margin-top: -10px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.delete-menu:hover {
+    background: #eee;
+}
