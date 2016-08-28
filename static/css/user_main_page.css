@@ -10,11 +10,23 @@ html, body {
     padding: 0;
 }
 
+#opacity {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    background-color: transparent;
+    transition: 0.5s;
+}
+
 .sidenav {
     height: 100%; /* 100% Full-height */
     width: 0; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Stay on top */
+    z-index: 2; /* Stay on top */
     top: 0;
     background-color: #F6F6F6; /* rgb: 242 242 242 */
     overflow-x: hidden; /* Disable horizontal scroll */

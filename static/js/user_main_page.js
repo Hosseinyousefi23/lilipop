@@ -16,8 +16,10 @@ var polygonMouseMoveListener;
 var polygonRightClickListener;
 var mapMouseMoveListener;
 var events;
+var opacity;
 var currentPolygon;
 var menu = new Menu();
+var selectedMapUI = 'disable';
 var mapUI = {
 
     // should be renamed if place type names in server database renamed
@@ -292,10 +294,19 @@ function Menu() {
     menu.selectedPlaceImg = null;
     menu.hasLocation = false;
 
+    menu.showOpacity = function () {
+        opacity.style.backgroundColor = "rgba(0,0,0,0.4)";
+        opacity.style.zIndex = '1';
+    };
+    menu.hideOpacity = function () {
+        document.getElementById('opacity').style.backgroundColor = "transparent";
+        opacity.style.zIndex = '-1';
+    };
     menu.open = function () {
         document.getElementById("menu").style.width = "200px";
         mapClickMenuListener = map.addListener('mousedown', menu.close);
-        document.getElementById('map').style.backgroundColor = "rgba(0,0,0,0.4)";
+        menu.showOpacity();
+
     };
 
     menu.close = function () {
@@ -303,11 +314,11 @@ function Menu() {
             menu.closeSubMenu();
             setTimeout(function () {
                 document.getElementById("menu").style.width = 0;
-                map.getDiv().style.backgroundColor = "rgba(0,0,0,0.4)";
+                menu.hideOpacity();
             }, 500);
         } else {
             document.getElementById("menu").style.width = 0;
-            document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+            menu.hideOpacity();
         }
         google.maps.event.removeListener(mapClickMenuListener);
         mapClickMenuListener = null;
@@ -318,7 +329,8 @@ function Menu() {
     };
     menu.hide = function () {
         document.getElementById("menu").style.width = 0;
-        document.body.style.backgroundColor = "white";
+        document.getElementById('reserve_div').style.right = 0;
+        menu.hideOpacity();
         google.maps.event.removeListener(mapClickMenuListener);
         mapClickMenuListener = null;
     };
@@ -357,7 +369,10 @@ function Menu() {
             document.getElementById('place_type_input').setAttribute('value', '');
             menu.selectedPlaceImg = null;
         }
-        mapUI['disable']();
+        if (selectedMapUI != 'disable') {
+            mapUI['disable']();
+            selectedMapUI = 'disable';
+        }
         menu.selectedMenuItem = null;
         menu.selectedMenuDiv = null;
         var reserveLink = document.getElementById('reserve_link');
@@ -374,9 +389,6 @@ function Menu() {
         aboutusLink.style.backgroundColor = 'transparent';
         aboutusLink.style.borderStyle = 'none';
         aboutusLink.style.borderBottom = 'solid #e1e1e1 2px';
-    };
-    menu.hideReserveMenu = function () {
-        document.getElementById('reserve_div').style.width = 0;
     };
     menu.openAboutusMenu = function (event) {
         event.stopPropagation();
@@ -481,6 +493,7 @@ function initMap() {
     populateEmbeddedList();
     createDoneButton();
     createCancelButton();
+    createOpacity();
 }
 function draw(time) {
     $.ajax({
@@ -804,13 +817,21 @@ function hideMarkers() {
 
 function showReserveUI() {
     if (menu.selectedPlaceImg) {
-        menu.hideReserveMenu();
         hideMarkers();
-        setTimeout(function () {
-            menu.hide();
-            mapUI[menu.selectedPlaceImg.getAttribute('name')]();
-        }, 500);
+        menu.hide();
+        var UIName = menu.selectedPlaceImg.getAttribute('name');
+        if (selectedMapUI != UIName) {
+            mapUI[UIName]();
+            selectedMapUI = UIName;
+        }
     } else {
         console.log('select a place type first');
     }
+}
+
+function createOpacity() {
+    opacity = document.createElement('div');
+    opacity.setAttribute('id', 'opacity');
+    opacity.addEventListener('mousedown', menu.close);
+    document.body.appendChild(opacity);
 }
