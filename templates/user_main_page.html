@@ -48,6 +48,10 @@
             <div id="location_image">
                 <img src="{% static 'icons/menu/location.png' %}" onclick="showReserveUI()" id="location_img"/>
             </div>
+            <div id="buttons">
+                <button id="cancel_button" class="menu_button" onclick="cancelButton(event)">Cancel</button>
+                <button id="done_button" class="menu_button" onclick="doneButton(event)">Done</button>
+            </div>
             <input type="hidden" name="locations" id="locations_input"/>
             <br style="clear: both"/>
         </div>

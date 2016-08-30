@@ -1,13 +1,14 @@
 var map;
 var infoWindows = {};
+var currentInfoWindow;
 var selectedTime = new Date().getTime();
 var markers = [];
+var showMarkers = true;
+var clearButtonDiv;
 var mapClickMenuListener;
 var embeddedList = [];
 var currentMarker = null;
-var doneButtonDiv = null;
-var cancelButtonDiv = null;
-var showDone = false;
+var currentFurniture = null;
 var locations = [];
 var listeners = [];
 var polygonComplete = false;
@@ -30,10 +31,9 @@ var mapUI = {
         for (var j = 0; j < listeners.length; j++) {
             google.maps.event.removeListener(listeners[j])
         }
-        if (showDone) {
-            removeDoneAndCancelButton();
-        }
+        removeDoneAndCancelButton();
         listeners = [];
+        locations = [];
         map.setOptions({draggableCursor: null});
         if (currentMarker) {
             currentMarker.setMap(null);
@@ -43,21 +43,25 @@ var mapUI = {
             currentPolygon.setMap(null);
             currentPolygon = null;
         }
+        if (currentFurniture) {
+            currentFurniture.setOptions({icon: '/static/icons/map/smart_furniture_deselected.png'});
+            currentFurniture = null;
+        }
         for (var k = 0; k < markers.length; k++) {
             markers[k].setMap(map);
         }
+        showMarkers = true;
     },
     'container_gallery': function () {
         for (var i = 0; i < embeddedList.length; i++) {
             embeddedList[i].setMap(null);
         }
         for (var j = 0; j < listeners.length; j++) {
-            google.maps.event.removeListener(listeners[j])
+            google.maps.event.removeListener(listeners[j]);
         }
-        if (showDone) {
-            removeDoneAndCancelButton();
-        }
+        removeDoneButton();
         listeners = [];
+        locations = [];
         map.setOptions({draggableCursor: 'crosshair'});
         if (currentMarker) {
             currentMarker.setMap(null);
@@ -67,14 +71,13 @@ var mapUI = {
             currentPolygon.setMap(null);
             currentPolygon = null;
         }
+        if (currentFurniture) {
+            currentFurniture.setOptions({icon: '/static/icons/map/smart_furniture_deselected.png'});
+            currentFurniture = null;
+        }
         var listener = map.addListener('click', function (event) {
             if (currentMarker) {
                 currentMarker.setMap(null);
-                currentMarker = null;
-            }
-            if (currentPolygon) {
-                currentPolygon.setMap(null);
-                currentPolygon = null;
             }
             currentMarker = new google.maps.Marker({
                 position: event.latLng,
@@ -82,11 +85,8 @@ var mapUI = {
                 draggable: true,
                 icon: '/static/icons/map/container_gallery.png'
             });
-            locations.push({lat: event.latLng.lat(), lng: event.latLng.lng()});
-            if (!showDone) {
-                map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(doneButtonDiv);
-                showDone = true;
-            }
+            locations = [{lat: event.latLng.lat(), lng: event.latLng.lng()}];
+            showDoneButton();
         });
         listeners.push(listener);
 
@@ -98,10 +98,9 @@ var mapUI = {
         for (var j = 0; j < listeners.length; j++) {
             google.maps.event.removeListener(listeners[j])
         }
-        if (showDone) {
-            removeDoneAndCancelButton();
-        }
+        removeDoneButton();
         listeners = [];
+        locations = [];
         map.setOptions({draggableCursor: 'crosshair'});
         if (currentMarker) {
             currentMarker.setMap(null);
@@ -111,11 +110,13 @@ var mapUI = {
             currentPolygon.setMap(null);
             currentPolygon = null;
         }
+        if (currentFurniture) {
+            currentFurniture.setOptions({icon: '/static/icons/map/smart_furniture_deselected.png'});
+            currentFurniture = null;
+        }
         var listener1 = map.addListener('click', function (event) {
             if (!currentPolygon) {
-                if (!showDone) {
-                    showCancelButton();
-                }
+                showClearButton();
                 currentPolygon = new google.maps.Polygon({
                     strokeColor: '#FF0000',
                     strokeOpacity: 0.8,
@@ -132,44 +133,28 @@ var mapUI = {
                         return null;
                     }
                     currentPolygon.getPath().push(currentPolygon.getPath().getAt(e.vertex));
-
                 });
                 polygonMouseMoveListener = google.maps.event.addListener(currentPolygon, 'mousemove', function (e) {
                     currentPolygon.getPath().setAt(currentPolygon.getPath().length - 1, e.latLng);
                 });
                 polygonRightClickListener = google.maps.event.addListener(currentPolygon, 'rightclick', function (e) {
-                    if (currentPolygon.getPath().length >= 3) {
+                    if (currentPolygon.getPath().length >= 4) {
                         currentPolygon.getPath().removeAt(currentPolygon.getPath().getLength() - 1);
                         google.maps.event.removeListener(polygonMouseClickListener);
                         google.maps.event.removeListener(polygonMouseMoveListener);
                         google.maps.event.removeListener(mapMouseMoveListener);
                         google.maps.event.removeListener(polygonRightClickListener);
-                        showDoneAndCancelButton();
                         startDeleteMenu();
                         polygonMouseClickListener = null;
                         polygonMouseMoveListener = null;
                         mapMouseMoveListener = null;
                         polygonRightClickListener = null;
+                        showDoneButton();
                     }
                 });
                 mapMouseMoveListener = map.addListener('mousemove', function (event) {
                     var path = currentPolygon.getPath();
                     path.setAt(path.length - 1, event.latLng);
-                });
-                google.maps.event.addListener(currentPolygon.getPath(), 'set_at', function () {
-                    if (!showDone) {
-                        showDoneAndCancelButton()
-                    }
-                });
-                google.maps.event.addListener(currentPolygon.getPath(), 'insert_at', function () {
-                    if (!showDone) {
-                        showDoneAndCancelButton()
-                    }
-                });
-                google.maps.event.addListener(currentPolygon.getPath(), 'remove_at', function () {
-                    if (!showDone) {
-                        showDoneAndCancelButton()
-                    }
                 });
 
                 listeners.push(mapMouseMoveListener);
@@ -181,15 +166,14 @@ var mapUI = {
     },
     'smart_furniture': function () {
         for (var i = 0; i < embeddedList.length; i++) {
-            embeddedList[i].setOptions({map: map, icon: '/static/icons/map/smart_furniture_deselected.png'});
+            embeddedList[i].setOptions({map: map});
         }
         for (var j = 0; j < listeners.length; j++) {
             google.maps.event.removeListener(listeners[j])
         }
-        if (showDone) {
-            removeDoneAndCancelButton();
-        }
+        removeDoneButton();
         listeners = [];
+        locations = [];
         map.setOptions({draggableCursor: null});
         if (currentMarker) {
             currentMarker.setMap(null);
@@ -199,20 +183,26 @@ var mapUI = {
             currentPolygon.setMap(null);
             currentPolygon = null;
         }
+        if (currentFurniture) {
+            currentFurniture.setOptions({icon: '/static/icons/map/smart_furniture_deselected.png'});
+            currentFurniture = null;
+        }
         for (var l = 0; l < embeddedList.length; l++) {
             google.maps.event.addListener(embeddedList[l], 'click', function () {
-                for (var x = 0; x < embeddedList.length; x++) {
-                    embeddedList[x].setOptions({
+                if (currentFurniture == this) {
+                    return;
+                }
+                if (currentFurniture) {
+                    currentFurniture.setOptions({
                         icon: '/static/icons/map/smart_furniture_deselected.png'
                     });
                 }
+                currentFurniture = this;
                 locations = [{lat: this.position.lat(), lng: this.position.lng()}];
                 this.setOptions({
                     icon: '/static/icons/map/smart_furniture.png'
                 });
-                if (!showDone) {
-                    showDoneButton();
-                }
+                showDoneButton();
             });
         }
     }
@@ -334,6 +324,12 @@ function Menu() {
         google.maps.event.removeListener(mapClickMenuListener);
         mapClickMenuListener = null;
     };
+    menu.unhide = function () {
+        document.getElementById('menu').style.width = '200px';
+        document.getElementById('reserve_div').style.right = '200px';
+        mapClickMenuListener = map.addListener('mousedown', menu.close);
+        menu.showOpacity();
+    };
     menu.openReserveMenu = function (event) {
         event.stopPropagation();
         var reserveLink = document.getElementById('reserve_link');
@@ -432,6 +428,12 @@ function Menu() {
         img.setAttribute('src', menu.icons[imgName]['select']);
         document.getElementById('place_type_input').setAttribute('value', imgName);
         menu.selectedPlaceImg = img;
+        if (showMarkers) {
+            hideMarkers();
+        }
+        document.getElementById('location_img').setAttribute('src', '/static/icons/menu/location.png');
+        mapUI[imgName]();
+        selectedMapUI = imgName;
     };
 }
 function initMap() {
@@ -456,7 +458,7 @@ function initMap() {
                 stylers: [
                     //{hue: '#000000'},
                     //{saturation: 0}
-                    {lightness: -100}
+                    {lightness: -80}
                 ]
             }, {
                 featureType: 'poi',
@@ -477,7 +479,7 @@ function initMap() {
                 featureType: 'landscape',
                 elementType: 'geometry',
                 stylers: [
-                    {hue: '#5CFF3F'},
+                    {hue: '#6DCFF6'}, //#5CFF3F
                     {saturation: 100},
                     {lightness: 100}
                     // rgb : 92 255 63
@@ -491,9 +493,9 @@ function initMap() {
     draw(null);
     addZoomListener();
     populateEmbeddedList();
-    createDoneButton();
-    createCancelButton();
+    createClearButton();
     createOpacity();
+    addCloseInfoWindowMapListener(); // this is a solution for info window is not fully created when user mouseout of the marker
 }
 function draw(time) {
     $.ajax({
@@ -556,6 +558,7 @@ function addMarkerListeners(marker) {
         var place_id = this.place_id;
         if (place_id in infoWindows) {
             infoWindows[place_id].open(map, this);
+            currentInfoWindow = infoWindows[place_id];
         } else {
             var url = '/event/data?request=current_events&time=' + selectedTime + '&place=' + place_id;
             $.ajax({
@@ -578,13 +581,15 @@ function addMarkerListeners(marker) {
                     });
                     infoWindow.open(map, marker);
                     infoWindows[parseInt(result['place_id'])] = infoWindow;
+                    currentInfoWindow = infoWindow;
                 }
             });
         }
     });
     google.maps.event.addListener(marker, 'mouseout', function () {
         if (infoWindows[marker.place_id]) {
-            infoWindows[marker.place_id].close()
+            infoWindows[marker.place_id].close();
+            currentInfoWindow = null;
         }
     });
 }
@@ -628,65 +633,50 @@ function populateEmbeddedList() {
             }
         }
     });
+
+}
+function doneButton(event) {
+    event.preventDefault();
+    document.getElementById('locations_input').setAttribute('value', JSON.stringify(locations));
+    removeDoneAndCancelButton();
+    menu.unhide();
+    document.getElementById('location_img').setAttribute('src', '/static/icons/menu/location_selected.png');
+    if (currentPolygon) {
+        for (var i = 0; i < currentPolygon.getPath().length; i++) {
+            locations.push({
+                lat: currentPolygon.getPath().getAt(i).lat(),
+                lng: currentPolygon.getPath().getAt(i).lng()
+            });
+        }
+    }
+    menu.hasLocation = true;
 }
 
-function createDoneButton() {
-    doneButtonDiv = document.createElement('div');
-    doneButtonDiv.style.backgroundColor = '#fff';
-    doneButtonDiv.style.border = '2px solid #fff';
-    doneButtonDiv.style.borderRadius = '3px';
-    doneButtonDiv.style.boxShadow = '0 2px 6px rgba(0,0,0,.4)';
-    doneButtonDiv.style.cursor = 'pointer';
-    doneButtonDiv.style.marginBottom = '22px';
-    doneButtonDiv.style.marginRight = '10px';
-    doneButtonDiv.style.marginLeft = '10px';
-    doneButtonDiv.style.textAlign = 'center';
-    doneButtonDiv.title = 'Done';
-    var doneButton = document.createElement('button');
-    doneButton.style.fontFamily = 'Roboto,Arial,sans-serif';
-    doneButton.style.fontSize = '16px';
-    doneButton.style.lineHeight = '38px';
-    doneButton.style.paddingLeft = '5px';
-    doneButton.style.paddingRight = '5px';
-    doneButton.innerHTML = 'Done';
-    doneButtonDiv.appendChild(doneButton);
-    doneButton.addEventListener('click', function (e) {
-        e.preventDefault();
-        $('#event_data').attr('value', JSON.stringify(locations));
-        removeDoneAndCancelButton();
-        $("#example-basic").steps('next');
-    });
-}
-
-function createCancelButton() {
-    cancelButtonDiv = document.createElement('div');
-    cancelButtonDiv.style.backgroundColor = '#fff';
-    cancelButtonDiv.style.border = '2px solid #fff';
-    cancelButtonDiv.style.borderRadius = '3px';
-    cancelButtonDiv.style.boxShadow = '0 2px 6px rgba(0,0,0,.4)';
-    cancelButtonDiv.style.cursor = 'pointer';
-    doneButtonDiv.style.marginRight = '10px';
-    doneButtonDiv.style.marginLeft = '10px';
-    cancelButtonDiv.style.marginBottom = '22px';
-    cancelButtonDiv.style.textAlign = 'center';
-    cancelButtonDiv.title = 'Done';
-    var cancelButton = document.createElement('button');
-    cancelButton.style.fontFamily = 'Roboto,Arial,sans-serif';
-    cancelButton.style.fontSize = '16px';
-    cancelButton.style.lineHeight = '38px';
-    cancelButton.style.paddingLeft = '5px';
-    cancelButton.style.paddingRight = '5px';
-    cancelButton.innerHTML = 'Cancel';
-    cancelButtonDiv.appendChild(cancelButton);
-    cancelButton.addEventListener('click', function (e) {
-        e.preventDefault();
+function cancelButton(event) {
+    event.preventDefault();
+    if (currentPolygon) {
         currentPolygon.setMap(null);
         currentPolygon = null;
-        removeDoneAndCancelButton();
-        google.maps.event.removeListener(mapMouseMoveListener);
-        mapMouseMoveListener = null;
-    });
+    }
+    if (currentMarker) {
+        currentMarker.setMap(null);
+        currentMarker = null;
+    }
+    if (currentFurniture) {
+        currentFurniture.setOptions({
+            icon: '/static/icons/map/smart_furniture_deselected.png'
+        });
+        currentFurniture = null;
+    }
+    removeClearButton();
+    removeDoneAndCancelButton();
+    menu.unhide();
+    google.maps.event.removeListener(mapMouseMoveListener);
+    mapMouseMoveListener = null;
+    document.getElementById('location_img').setAttribute('src', '/static/icons/menu/location.png');
+    menu.hasLocation = false;
 }
+
 
 function startDeleteMenu() {
     function DeleteMenu() {
@@ -782,25 +772,58 @@ function startDeleteMenu() {
     });
 }
 
-function showDoneAndCancelButton() {
-    map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(doneButtonDiv);
-    map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(cancelButtonDiv);
-    showDone = true;
+function createClearButton() {
+    clearButtonDiv = document.createElement('div');
+    clearButtonDiv.style.backgroundColor = '#fff';
+    clearButtonDiv.style.border = '2px solid #fff';
+    clearButtonDiv.style.borderRadius = '3px';
+    clearButtonDiv.style.boxShadow = '0 2px 6px rgba(0,0,0,.4)';
+    clearButtonDiv.style.cursor = 'pointer';
+    clearButtonDiv.style.marginBottom = '22px';
+    clearButtonDiv.style.textAlign = 'center';
+    clearButtonDiv.title = 'Clear';
+    var clearButton = document.createElement('button');
+    clearButton.style.fontFamily = 'Roboto,Arial,sans-serif';
+    clearButton.style.fontSize = '16px';
+    clearButton.style.lineHeight = '38px';
+    clearButton.style.paddingLeft = '5px';
+    clearButton.style.paddingRight = '5px';
+    clearButton.innerHTML = 'Clear';
+    clearButtonDiv.appendChild(clearButton);
+    clearButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        currentPolygon.setMap(null);
+        currentPolygon = null;
+        google.maps.event.removeListener(mapMouseMoveListener);
+        mapMouseMoveListener = null;
+        removeClearButton();
+        removeDoneButton();
+    });
 }
 
 function removeDoneAndCancelButton() {
-    map.controls[google.maps.ControlPosition.BOTTOM_CENTER].clear();
-    showDone = false;
+    document.getElementById('done_button').style.display = 'none';
+    document.getElementById('cancel_button').style.display = 'none';
 }
 
 function showCancelButton() {
-    map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(cancelButtonDiv);
-    showDone = true;
+    document.getElementById('cancel_button').style.display = 'inline-block';
 }
 
 function showDoneButton() {
-    map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(doneButtonDiv);
-    showDone = true;
+    document.getElementById('done_button').style.display = 'inline-block';
+
+}
+function removeDoneButton() {
+    document.getElementById('done_button').style.display = 'none';
+}
+function showClearButton() {
+    map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(clearButtonDiv);
+
+}
+
+function removeClearButton() {
+    map.controls[google.maps.ControlPosition.BOTTOM_CENTER].clear();
 }
 
 function locationParse(string) {
@@ -813,16 +836,15 @@ function hideMarkers() {
     for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(null);
     }
+    showMarkers = false;
 }
 
 function showReserveUI() {
     if (menu.selectedPlaceImg) {
-        hideMarkers();
         menu.hide();
-        var UIName = menu.selectedPlaceImg.getAttribute('name');
-        if (selectedMapUI != UIName) {
-            mapUI[UIName]();
-            selectedMapUI = UIName;
+        showCancelButton();
+        if (menu.hasLocation) {
+            showDoneButton();
         }
     } else {
         console.log('select a place type first');
@@ -834,4 +856,13 @@ function createOpacity() {
     opacity.setAttribute('id', 'opacity');
     opacity.addEventListener('mousedown', menu.close);
     document.body.appendChild(opacity);
+}
+
+function addCloseInfoWindowMapListener() {
+    map.addListener('mousemove', function () {
+        if (currentInfoWindow) {
+            currentInfoWindow.close();
+            currentInfoWindow = null;
+        }
+    });
 }
