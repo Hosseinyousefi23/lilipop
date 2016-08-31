@@ -293,7 +293,7 @@ function Menu() {
         opacity.style.zIndex = '-1';
     };
     menu.open = function () {
-        document.getElementById("menu").style.width = "200px";
+        document.getElementById("menu").style.width = "198px";
         mapClickMenuListener = map.addListener('mousedown', menu.close);
         menu.showOpacity();
 
@@ -302,6 +302,7 @@ function Menu() {
     menu.close = function () {
         if (menu.selectedMenuDiv) {
             menu.closeSubMenu();
+            document.getElementById('triangle-right').style.display = 'none';
             setTimeout(function () {
                 document.getElementById("menu").style.width = 0;
                 menu.hideOpacity();
@@ -325,7 +326,7 @@ function Menu() {
         mapClickMenuListener = null;
     };
     menu.unhide = function () {
-        document.getElementById('menu').style.width = '200px';
+        document.getElementById('menu').style.width = '198px';
         document.getElementById('reserve_div').style.right = '200px';
         mapClickMenuListener = map.addListener('mousedown', menu.close);
         menu.showOpacity();
@@ -339,7 +340,8 @@ function Menu() {
         if (menu.selectedMenuItem) {
             menu.closeSubMenu();
             reserveLink.style.backgroundColor = '#6DCFF6';
-            reserveLink.style.borderStyle = 'inset';
+            //reserveLink.style.borderStyle = 'inset';
+            document.getElementById('triangle-right').style.top = '94px';
             menu.selectedMenuItem = reserveLink;
             menu.selectedMenuDiv = document.getElementById('reserve_div');
             setTimeout(function () {
@@ -349,7 +351,9 @@ function Menu() {
             menu.selectedMenuItem = reserveLink;
             menu.selectedMenuDiv = document.getElementById('reserve_div');
             reserveLink.style.backgroundColor = '#6DCFF6';
-            reserveLink.style.borderStyle = 'inset';
+            //reserveLink.style.borderStyle = 'inset';
+            document.getElementById('triangle-right').style.display = 'block';
+            document.getElementById('triangle-right').style.top = '94px';
             document.getElementById('reserve_div').style.width = '600px';
         }
     };
@@ -374,7 +378,7 @@ function Menu() {
         var reserveLink = document.getElementById('reserve_link');
         document.getElementById('reserve_div').style.width = 0;
         reserveLink.style.backgroundColor = 'transparent';
-        reserveLink.style.borderStyle = 'none';
+        //reserveLink.style.borderStyle = 'none';
         reserveLink.style.borderBottom = 'solid #e1e1e1 2px';
     };
     menu.closeAboutusMenu = function () {
@@ -383,7 +387,7 @@ function Menu() {
         var aboutusLink = document.getElementById('aboutus_link');
         document.getElementById('aboutus_div').style.width = 0;
         aboutusLink.style.backgroundColor = 'transparent';
-        aboutusLink.style.borderStyle = 'none';
+        //aboutusLink.style.borderStyle = 'none';
         aboutusLink.style.borderBottom = 'solid #e1e1e1 2px';
     };
     menu.openAboutusMenu = function (event) {
@@ -395,7 +399,8 @@ function Menu() {
         if (menu.selectedMenuItem) {
             menu.closeSubMenu();
             aboutusLink.style.backgroundColor = '#6DCFF6';
-            aboutusLink.style.borderStyle = 'inset';
+            //aboutusLink.style.borderStyle = 'inset';
+            document.getElementById('triangle-right').style.top = '163px';
             menu.selectedMenuItem = aboutusLink;
             menu.selectedMenuDiv = document.getElementById('aboutus_div');
             setTimeout(function () {
@@ -405,7 +410,9 @@ function Menu() {
             menu.selectedMenuItem = aboutusLink;
             menu.selectedMenuDiv = document.getElementById('aboutus_div');
             aboutusLink.style.backgroundColor = '#6DCFF6';
-            aboutusLink.style.borderStyle = 'inset';
+            //aboutusLink.style.borderStyle = 'inset';
+            document.getElementById('triangle-right').style.display = 'block';
+            document.getElementById('triangle-right').style.top = '163px';
             document.getElementById('aboutus_div').style.width = '400px';
         }
     };

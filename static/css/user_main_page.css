@@ -28,16 +28,17 @@ html, body {
     position: fixed; /* Stay in place */
     z-index: 2; /* Stay on top */
     top: 0;
-    background-color: #F6F6F6; /* rgb: 242 242 242 */
+    background-color: #FFFFFF; /* rgb: 242 242 242 */
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 20px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
     white-space: nowrap;
-    box-shadow: -1px 0 10px #666666;
+    /*box-shadow: -4px 0 5px #666666;*/
 }
 
 #menu {
     right: 0;
+    border-left: solid 2px rgb(225, 225, 225);
 }
 
 /* The navigation menu links */
@@ -96,7 +97,6 @@ html, body {
 #reserve_div {
     right: 200px;
     padding-top: 100px;
-
 }
 
 .form_part {
@@ -192,3 +192,31 @@ html, body {
     background: #eee;
 }
 
+#triangle-right {
+    z-index: 3;
+    position: absolute;
+    right: 170px;
+    top: 0;
+    /* top: 94px or 163px */
+    width: 0;
+    height: 0;
+    border-bottom: 36px solid transparent;
+    border-top: 36px solid transparent;
+    border-left: 30px solid rgb(225, 225, 225);
+    display: none;
+    transition: 0.5s;
+
+}
+
+#triangle-right:after {
+    z-index: 3;
+    content: '';
+    position: absolute;
+    top: -33px;
+    left: -30px;
+    width: 0;
+    height: 0;
+    border-bottom: 33px solid transparent;
+    border-top: 33px solid transparent;
+    border-left: 28px solid #FFFFFF;
+}

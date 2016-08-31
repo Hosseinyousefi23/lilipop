@@ -9,7 +9,8 @@
     <script src="{% static 'js/user_main_page.js' %}"></script>
 </head>
 <body>
-<div id="menu" class="sidenav" dir="rtl" onclick="menu.closeSubMenu()">
+<div id="menu" class="sidenav" dir="rtl"
+     onclick="menu.closeSubMenu(); document.getElementById('triangle-right').style.display = 'none';">
     <div id="closebtndiv">
         <a href="javascript:void(0)" id="closebtn" onclick="menu.closeButton(event)"><b>&times;</b></a>
     </div>
@@ -26,6 +27,7 @@
         <a href="#"><img src="{% static 'icons/menu/facebook.png' %}" width="25px"/></a>
     </div>
 </div>
+<div id="triangle-right"></div>
 <div class="sidenav" id="reserve_div" dir="rtl">
     <form>
         <div id="select_place_div" class="form_part">
@@ -70,7 +72,7 @@
     </form>
 </div>
 <div class="sidenav" id="aboutus_div" dir="rtl">
-
+    <h1 style="width: 100% margin: 0; text-align: center ; padding: 400px 0"><b>TUIC</b></h1>
 </div>
 
 <div id="map"></div>
