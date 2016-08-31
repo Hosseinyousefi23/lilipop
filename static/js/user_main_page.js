@@ -118,10 +118,10 @@ var mapUI = {
             if (!currentPolygon) {
                 showClearButton();
                 currentPolygon = new google.maps.Polygon({
-                    strokeColor: '#FF0000',
+                    strokeColor: '#075572', //rgb: 43 187 242
                     strokeOpacity: 0.8,
                     strokeWeight: 3,
-                    fillColor: '#FF0000',
+                    fillColor: '#0C92C5',
                     fillOpacity: 0.35,
                     editable: true
                 });
@@ -293,9 +293,9 @@ function Menu() {
         opacity.style.zIndex = '-1';
     };
     menu.open = function () {
-        document.getElementById("menu").style.width = "198px";
         mapClickMenuListener = map.addListener('mousedown', menu.close);
         menu.showOpacity();
+        document.getElementById("menu").style.width = "198px";
 
     };
 
@@ -320,6 +320,7 @@ function Menu() {
     };
     menu.hide = function () {
         document.getElementById("menu").style.width = 0;
+        document.getElementById('triangle-right').style.display = 'none';
         document.getElementById('reserve_div').style.right = 0;
         menu.hideOpacity();
         google.maps.event.removeListener(mapClickMenuListener);
@@ -330,6 +331,9 @@ function Menu() {
         document.getElementById('reserve_div').style.right = '200px';
         mapClickMenuListener = map.addListener('mousedown', menu.close);
         menu.showOpacity();
+        setTimeout(function () {
+            document.getElementById('triangle-right').style.display = 'block';
+        }, 500);
     };
     menu.openReserveMenu = function (event) {
         event.stopPropagation();
@@ -435,6 +439,7 @@ function Menu() {
         img.setAttribute('src', menu.icons[imgName]['select']);
         document.getElementById('place_type_input').setAttribute('value', imgName);
         menu.selectedPlaceImg = img;
+        removeClearButton();
         if (showMarkers) {
             hideMarkers();
         }
