@@ -14,6 +14,9 @@ class Subject(models.Model):
 class Facility(models.Model):
     name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.name
+
 
 class PlaceType(models.Model):
     # There are 3 types so far: Container gallery (container_gallery) , Mobile media unit (mobile_media_unit) ,
@@ -70,6 +73,9 @@ class Event(models.Model):
     owner = models.ForeignKey(User)
     startDateTime = models.DateTimeField()
     endDateTime = models.DateTimeField()
+    description = models.CharField(max_length=500, null=True, blank=True)
+    duration = models.CharField(max_length=100, null=True, blank=True)
+    schedule_text = models.CharField(max_length=100, null=True, blank=True)
     image = models.ImageField(upload_to='files/%Y/%m/%d/', null=True)
 
     def __str__(self):
@@ -96,6 +102,8 @@ class Schedule(models.Model):
 
 class File(models.Model):
     file_field = models.FileField(upload_to='files/%Y/%m/%d/')
+    type = models.CharField(max_length=100, choices=(('image', 'image'), ('video', 'video')), default='image')
+    poster = models.ImageField(upload_to='files/%Y/%m/%d/', null=True, blank=True)
     event = models.ForeignKey(Event, related_name='files')
 
 
@@ -104,6 +112,6 @@ class Text(models.Model):
     event = models.ForeignKey(Event, related_name='texts')
 
 
-class EventLocation(models.Model):
+class PlaceLocation(models.Model):
     location = GeopositionField()
-    event = models.ForeignKey(Event, related_name='area_point_set')
+    place = models.ForeignKey(Place, null=True , related_name='area_point_set')

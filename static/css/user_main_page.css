@@ -1,3 +1,8 @@
+@font-face {
+    font-family: roya;
+    src: url(B%20Roya_0.ttf)
+}
+
 html, body {
     height: 100%;
     padding: 0;
@@ -29,16 +34,17 @@ html, body {
     z-index: 2; /* Stay on top */
     top: 0;
     background-color: #FFFFFF; /* rgb: 242 242 242 */
-    overflow-x: hidden; /* Disable horizontal scroll */
+    overflow-x: hidden; /*Disable horizontal scroll */
     padding-top: 20px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
     white-space: nowrap;
-    /*box-shadow: -4px 0 5px #666666;*/
+    box-shadow: -5px 0 10px #666666;
 }
 
 #menu {
     right: 0;
     border-left: solid 2px rgb(225, 225, 225);
+    box-shadow: none;
 }
 
 /* The navigation menu links */
@@ -169,6 +175,137 @@ html, body {
     margin-left: 7px;
 }
 
+#select_time_div {
+
+}
+
+.ADMdtp-calendar-container {
+    font-family: roya;
+    background-color: rgb(109, 207, 246) !important;
+    border-radius: 15px !important;
+}
+
+.ADMdtp-container .ADMdtp-calendar-container .days > span > span {
+    color: #ffffff;
+}
+
+.ADMdtp-container .ADMdtp-calendar-container .daysNames > span {
+    color: #000000;
+}
+
+.ADMdtp-container .ADMdtp-calendar-container .days > span > span.selected, .ADMdtp-container .ADMdtp-calendar-container .monthPickerContainer .monthContainer .days > span > span:hover {
+    background: #ffffff;
+}
+
+.time_div {
+    width: 40%;
+    float: right;
+    margin: 0 1%;
+}
+
+#time_schedule_div {
+    float: right;
+    width: 6%;
+    margin: 0 1%;
+    padding-top: 66px;
+}
+
+.time-picker {
+    white-space: normal;
+
+}
+
+.time-picker * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+.dropdown-menu {
+    position: absolute;
+    right: 123px;
+    background-color: #6DCFF6;
+    width: 389px;
+    border-radius: 10px;
+    padding: 5px 20px;
+    display: none;
+    z-index: 4;
+
+}
+
+.day_item {
+    margin: 10px 0;
+    font-size: 18px;
+
+}
+
+.day_item input[type=text] {
+    float: right;
+    margin: 0 20px;
+    background-color: transparent;
+    border: none;
+    border-radius: 4px;
+    font-size: 18px;
+    width: 93px;
+    text-align: center;
+}
+
+.checkbox-inline {
+    float: right;
+    width: 30%;
+
+}
+
+.checkbox-inline input[type=checkbox] {
+    width: 15px;
+    height: 15px;
+}
+
+.time_picker {
+    float: right;
+
+}
+
+.dash {
+    float: right;
+    margin: 0;
+    height: 20px;
+
+}
+
+.dropdown-toggle {
+    width: 100%;
+    height: 36px;
+}
+
+#title_div {
+    margin-top: 20px;
+}
+
+#title_div h2 {
+    float: right;
+    margin-left: 5%;
+}
+
+#title_text {
+    position: absolute;
+    float: right;
+    margin-top: 20px;
+    font-size: 20px;
+    width: 69%;
+}
+
+#description_text {
+    width: 89%;
+    height: 200px;
+}
+
+.facility_item {
+    float: right;
+    width: 20%;
+    margin: 10px;
+}
+
 #aboutus_div {
     right: 200px;
 }
@@ -219,4 +356,38 @@ html, body {
     border-bottom: 33px solid transparent;
     border-top: 33px solid transparent;
     border-left: 28px solid #FFFFFF;
+}
+
+#event_div {
+    right: 0;
+}
+
+#event_closebtn {
+    font-size: 4em;
+    text-decoration: none;
+    margin-right: 20px;
+    color: #818181;
+    display: block;
+    transition: color 0.3s, background-color 0.4s;
+    cursor: pointer;
+}
+
+#event_title {
+    margin-right: 7%;
+}
+
+#event_time {
+    margin-right: 7%;
+}
+
+#event_schedule {
+    margin-right: 7%;
+}
+
+#event_description {
+    width: 600px;
+    height: 210px;
+    overflow-y: auto;
+    white-space: normal;
+    margin: 0 7% 0 0;
 }

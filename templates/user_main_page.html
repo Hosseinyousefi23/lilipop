@@ -5,7 +5,16 @@
     <meta charset="UTF-8">
     <title>Main Page</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/ADM-dateTimePicker.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css' %}"/>
+    {#    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>#}
     <link rel="stylesheet" href="{% static 'css/user_main_page.css' %}">
+    {#    <script src="{% static 'js/bootstrap.min.js' %}"></script>#}
+    <script src="{% static 'js/jquery.timepicker.min.js' %}"></script>
+    <script src="{% static 'js/angular.min.js' %}"></script>
+    <script src="{% static 'js/ADM-dateTimePicker.min.js' %}"></script>
+    <script src="{% static 'js/amazingslider.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/amazingslider-1.css' %}">
     <script src="{% static 'js/user_main_page.js' %}"></script>
 </head>
 <body>
@@ -29,7 +38,20 @@
 </div>
 <div id="triangle-right"></div>
 <div class="sidenav" id="reserve_div" dir="rtl">
-    <form>
+    <script>
+        app = angular.module('myApp', ['ADM-dateTimePicker']);
+        app.config(['ADMdtpProvider', function (ADMdtp) {
+            ADMdtp.setOptions({
+                calType: 'jalali',
+                format: 'YYYY/MM/DD hh:mm',
+                dtpType: 'date',
+                multiple: false,
+                autoClose: true,
+                transition: true
+            });
+        }]);
+    </script>
+    <form ng-app="myApp">
         <div id="select_place_div" class="form_part">
             <h2>Place</h2>
 
@@ -57,22 +79,205 @@
             <input type="hidden" name="locations" id="locations_input"/>
             <br style="clear: both"/>
         </div>
+
         <div id="select_time_div" class="form_part">
             <h2>Time</h2>
+
+            <div class="time_div">
+                <h2>start</h2>
+                <adm-dtp ng-model="date1" options='date_options' full-data="date1_detail" class="time-picker"
+                         maxdate="{% verbatim %} {{ date2_detail.unix }} {% endverbatim %}"></adm-dtp>
+            </div>
+            <div class="time_div">
+                <h2>end</h2>
+                <adm-dtp ng-model="date2" options='date_options' full-data="date2_detail" class="time-picker"
+                         mindate="{% verbatim %} {{ date1_detail.unix }} {% endverbatim %}"></adm-dtp>
+            </div>
+            <div id="time_schedule_div">
+
+                <div class="dropdown">
+                    <button class="dropdown-toggle">&#9660;</button>
+                    <div class="dropdown-menu">
+                        <div class="day_item">
+                            <label class="checkbox-inline"><input type="checkbox" class="checkbox all" value=""
+                                                                  checked="checked">All</label>
+                            <input type="text" class="time_picker from all"/>
+
+                            <p class="dash">-</p>
+                            <input type="text" class="time_picker to all"/>
+                            <br style="clear: both"/>
+                        </div>
+                        <div class="day_item">
+                            <label class="checkbox-inline"><input type="checkbox" class="checkbox sat" value=""
+                                                                  checked="checked">Saturday</label>
+                            <input type="text" class="time_picker from sat"/>
+
+                            <p class="dash">-</p>
+                            <input type="text" class="time_picker to sat"/>
+                            <br style="clear: both"/>
+                        </div>
+                        <div class="day_item">
+                            <label class="checkbox-inline"><input type="checkbox" class="checkbox sun" value=""
+                                                                  checked="checked">Sunday</label>
+                            <input type="text" class="time_picker from sun"/>
+
+                            <p class="dash">-</p>
+                            <input type="text" class="time_picker to sun"/>
+                            <br style="clear: both"/>
+                        </div>
+                        <div class="day_item">
+                            <label class="checkbox-inline"><input type="checkbox" class="checkbox mon" value=""
+                                                                  checked="checked">Monday</label>
+                            <input type="text" class="time_picker from mon"/>
+
+                            <p class="dash">-</p>
+                            <input type="text" class="time_picker to mon"/>
+                            <br style="clear: both"/>
+                        </div>
+                        <div class="day_item">
+                            <label class="checkbox-inline"><input type="checkbox" class="checkbox tue" value=""
+                                                                  checked="checked">Tuesday</label>
+                            <input type="text" class="time_picker from tue"/>
+
+                            <p class="dash">-</p>
+                            <input type="text" class="time_picker to tue"/>
+                            <br style="clear: both"/>
+                        </div>
+                        <div class="day_item">
+                            <label class="checkbox-inline"><input type="checkbox" class="checkbox wed" value=""
+                                                                  checked="checked">Wednesday</label>
+                            <input type="text" class="time_picker from wed"/>
+
+                            <p class="dash">-</p>
+                            <input type="text" class="time_picker to wed"/>
+                            <br style="clear: both"/>
+                        </div>
+                        <div class="day_item">
+                            <label class="checkbox-inline"><input type="checkbox" class="checkbox thu" value=""
+                                                                  checked="checked">Thursday</label>
+                            <input type="text" class="time_picker from thu"/>
+
+                            <p class="dash">-</p>
+                            <input type="text" class="time_picker to thu"/>
+                            <br style="clear: both"/>
+                        </div>
+                        <div class="day_item">
+                            <label class="checkbox-inline"><input type="checkbox" class="checkbox fri" value=""
+                                                                  checked="checked">Friday</label>
+                            <input type="text" class="time_picker from fri"/>
+
+                            <p class="dash">-</p>
+                            <input type="text" class="time_picker to fri"/>
+                            <br style="clear: both"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                function switchTimePickersEnable(bool, string) {
+                    $('.checkbox' + string).each(function () {
+                        this.parentNode.parentNode.childNodes[3].disabled = !bool;
+                        this.parentNode.parentNode.childNodes[7].disabled = !bool;
+                        this.checked = bool;
+                    });
+                }
+
+                function setTimePickerTime(string, time) {
+                    $(string + '.all').timepicker('setTime', time);
+                    $(string + '.sat').timepicker('setTime', time);
+                    $(string + '.sun').timepicker('setTime', time);
+                    $(string + '.mon').timepicker('setTime', time);
+                    $(string + '.tue').timepicker('setTime', time);
+                    $(string + '.wed').timepicker('setTime', time);
+                    $(string + '.thu').timepicker('setTime', time);
+                    $(string + '.fri').timepicker('setTime', time);
+                }
+                $('.dropdown-toggle').bind('click', function () {
+                    var menu = $('.dropdown-menu')[0];
+                    var display = menu.style.display;
+                    if (display != 'block') {
+                        menu.style.display = 'block';
+                    } else {
+                        menu.style.display = 'none';
+                    }
+                });
+                var picker = $('.time_picker');
+                picker.timepicker();
+                picker.timepicker('option', {useSelect: false});
+                setTimePickerTime('.from', new Date(0, 0, 0, 8, 0, 0, 0));
+                setTimePickerTime('.to', new Date(0, 0, 0, 16, 0, 0, 0));
+                $('.checkbox').bind('click', function () {
+                    var string = '.' + this.classList[1];
+                    if (string == '.all') {
+                        string = '';
+                    } else if (!this.checked) {
+                        $('.checkbox.all')[0].checked = false;
+                    }
+                    switchTimePickersEnable(this.checked, string);
+                });
+                $('.time_picker.from.all').bind('change', function () {
+                    $('.time_picker.from').each(function () {
+                        this.value = $('.time_picker.from.all')[0].value;
+                    });
+                });
+                $('.time_picker.to.all').bind('change', function () {
+                    $('.time_picker.to').each(function () {
+                        this.value = $('.time_picker.to.all')[0].value;
+                    });
+                });
+            </script>
+            <br style="clear: both"/>
         </div>
         <div id="title_div" class="form_part">
             <h2>Title</h2>
+            <input type='text' id="title_text"/>
+            <br style="clear: both;"/>
         </div>
         <div id="description_div" class="form_part">
             <h2>Description</h2>
+            <textarea id="description_text"></textarea>
         </div>
         <div id="select_facilities" class="form_part">
             <h2>Facilities</h2>
+
+            <div id="facilities_div">
+            </div>
         </div>
     </form>
 </div>
 <div class="sidenav" id="aboutus_div" dir="rtl">
     <h1 style="width: 100% margin: 0; text-align: center ; padding: 400px 0"><b>TUIC</b></h1>
+</div>
+<div class="sidenav" id="event_div" dir="rtl">
+    <div id="event_closebtndiv">
+        <a href="javascript:void(0)" id="event_closebtn" onclick="closeEventDiv(event)"><b>&times;</b></a>
+    </div>
+    <h2 id="event_title"></h2>
+
+    <div id="amazingslider-wrapper-1" style="display:block;position:relative;max-width:600px;margin:0 auto 48px;">
+        {#            <ul class="amazingslider-slides" id="slider_contents" style="display:none;">#}
+        {#                <li><a href="{% static 'icons/slider/as-btn-orangeborder-large-lightbox.png' %}"#}
+        {#                       class="html5lightbox"><img#}
+        {#                        src="static/icon/as-btn-orangeborder-large.png" alt="as-btn-orangeborder-large"#}
+        {#                        title="as-btn-orangeborder-large"/></a>#}
+        {#                </li>#}
+        {#                <li>#}
+        {#                    <a href="static/icon/WWW.DOWNVIDS.NET-%D8%AF%DA%A9%D8%AA%D8%B1%20%D9%87%D9%84%D8%A7%DA%A9%D9%88%DB%8C%DB%8C%20-%20%D9%85%D9%88%D8%B6%D9%88%D8%B9%20%D8%AA%D9%86%D8%A8%D9%84%DB%8C.mp4"#}
+        {#                       class="html5lightbox"><img data-src="static/icon/as-btn-whiteborder-large.png"#}
+        {#                                                  alt="WWW.DOWNVIDS.NET-دکتر هلاکویی - موضوع تنبلی"#}
+        {#                                                  title="WWW.DOWNVIDS.NET-دکتر هلاکویی - موضوع تنبلی"/></a>#}
+        {#                </li>#}
+        {#            </ul>#}
+    </div>
+    <h2 id="event_time"></h2>
+
+    <h2 id="event_schedule"></h2>
+
+    <hr>
+
+    <h5 id="event_description"></h5>
+
+</div>
 </div>
 
 <div id="map"></div>

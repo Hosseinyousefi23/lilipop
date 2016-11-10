@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.utils import timezone
 
 from event.Forms import ReserveForm
-from event.models import PlaceType, Event, Place
+from event.models import PlaceType, Event, Place, Facility, File, PlaceLocation
 
 
 @login_required
@@ -85,6 +85,20 @@ def send_data(request):
         return JsonResponse({
             'events': serializers.serialize('json', events)
         })
+    elif request.GET['request'] == 'facility':
+        return JsonResponse({
+            'facilities': serializers.serialize('json', Facility.objects.all())
+        })
+    elif request.GET['request'] == 'files':
+        event_id = int(request.GET['event'])
+        event = Event.objects.get(pk=event_id)
+        return JsonResponse({
+            'files': serializers.serialize('json', File.objects.filter(event=event))
+        })
+    elif request.GET['request'] == 'zone':
+        place_id = int(request.GET['place'])
+        place = Place.objects.get(pk=place_id)
+        return JsonResponse({'zone': serializers.serialize('json', PlaceLocation.objects.filter(place=place))})
 
 
 def my_events(request):

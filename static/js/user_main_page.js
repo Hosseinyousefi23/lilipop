@@ -1,8 +1,12 @@
 var map;
+var app;
 var infoWindows = {};
 var currentInfoWindow;
 var selectedTime = new Date().getTime();
+var currentEventDivMarker = null;
 var markers = [];
+var paths = [];
+var zones = [];
 var showMarkers = true;
 var clearButtonDiv;
 var mapClickMenuListener;
@@ -50,6 +54,7 @@ var mapUI = {
         for (var k = 0; k < markers.length; k++) {
             markers[k].setMap(map);
         }
+        removeClearButton();
         showMarkers = true;
     },
     'container_gallery': function () {
@@ -259,6 +264,31 @@ var drawPlace = {
     }
 
 };
+var drawPath = function (location_set) {
+    var carGPSCoordinates = [];
+    for (var i = 0; i < location_set.length; i++) {
+        var latitudeLongitude = location_set[i].fields.position.split(',');
+        carGPSCoordinates.push({lat: parseFloat(latitudeLongitude[0]), lng: parseFloat(latitudeLongitude[1])});
+    }
+    var lineSymbol = {
+        path: 'M 0,0 0,0',
+        strokeOpacity: 1,
+        scale: 13
+    };
+    var carPath = new google.maps.Polyline({
+        path: carGPSCoordinates,
+        strokeOpacity: 0,
+        icons: [{
+            icon: lineSymbol,
+            offset: '0',
+            repeat: '15px'
+        }],
+        geodesic: true,
+        strokeColor: '#6DCFF6'
+    });
+    carPath.setMap(map);
+    paths.push(carPath);
+};
 function Menu() {
     var menu = this;
     menu.icons = {
@@ -293,9 +323,11 @@ function Menu() {
         opacity.style.zIndex = '-1';
     };
     menu.open = function () {
-        mapClickMenuListener = map.addListener('mousedown', menu.close);
         menu.showOpacity();
         document.getElementById("menu").style.width = "198px";
+        setTimeout(function () {
+            mapClickMenuListener = map.addListener('mousedown', menu.close);
+        }, 500)
 
     };
 
@@ -377,13 +409,14 @@ function Menu() {
             mapUI['disable']();
             selectedMapUI = 'disable';
         }
+        document.getElementsByClassName('dropdown-menu')[0].style.display = 'none';
         menu.selectedMenuItem = null;
         menu.selectedMenuDiv = null;
         var reserveLink = document.getElementById('reserve_link');
         document.getElementById('reserve_div').style.width = 0;
         reserveLink.style.backgroundColor = 'transparent';
         //reserveLink.style.borderStyle = 'none';
-        reserveLink.style.borderBottom = 'solid #e1e1e1 2px';
+        //reserveLink.style.borderBottom = 'solid #e1e1e1 2px';
     };
     menu.closeAboutusMenu = function () {
         menu.selectedMenuItem = null;
@@ -499,6 +532,9 @@ function initMap() {
             }
         ]
     });
+    map.addListener('click', function () {
+        document.getElementById('event_div').style.width = 0;
+    });
     addTuicLogo();
     addProjectLogo();
     addMenuIcon();
@@ -507,6 +543,7 @@ function initMap() {
     populateEmbeddedList();
     createClearButton();
     createOpacity();
+    getFacilities();
     addCloseInfoWindowMapListener(); // this is a solution for info window is not fully created when user mouseout of the marker
 }
 function draw(time) {
@@ -514,15 +551,54 @@ function draw(time) {
         url: '/event/data?request=places',
         success: function (result) {
             var places = JSON.parse(result['places']);
-            for (var i = 0; i < places.length; i++) {
-                var url = '/event/data?request=location&place=' + places[i].pk;
+            //console.log(places);
+            for (var ii = 0; ii < places.length; ii++) {
+                if (places[ii].fields.type == 2) {
+                    var morningSelectedTime = new Date(selectedTime);
+                    morningSelectedTime.setHours(7);
+                    morningSelectedTime.setMinutes(0);
+                    morningSelectedTime.setSeconds(0);
+                    var url = '/event/data?request=location_set&from=' + morningSelectedTime.getTime() + '&to=' + selectedTime + '&place=' + places[ii].pk
+                    $.ajax({
+                        url: url,
+                        success: function (result) {
+                            var location_set = JSON.parse(result['location_set']);
+                            console.log(location_set);
+                            drawPath(location_set);
+                        }
+                    });
+                    var url2 = '/event/data?request=zone&place=' + places[ii].pk;
+                    $.ajax({
+                        url: url2,
+                        success: function (result) {
+                            var zone = JSON.parse(result['zone']);
+                            var zoneCoordinates = [];
+                            for (var i = 0; i < zone.length; i++) {
+                                var latitudeLongitude = zone[i].fields.location.split(',');
+                                zoneCoordinates.push({
+                                    lat: parseFloat(latitudeLongitude[0]),
+                                    lng: parseFloat(latitudeLongitude[1])
+                                });
+                            }
+                            var carZone = new google.maps.Polygon({
+                                path: zoneCoordinates,
+                                strokeColor: '#075572', //rgb: 43 187 242
+                                strokeOpacity: 0.8,
+                                strokeWeight: 3,
+                                fillColor: '#0C92C5',
+                                fillOpacity: 0.35
+                            });
+                            zones.push(carZone);
+                        }
+                    });
+                }
+                var url = '/event/data?request=location&place=' + places[ii].pk;
                 if (time) {
                     url += '&time=' + time;
                 }
                 $.ajax({
                     url: url,
                     success: function (result) {
-                        console.log(result);
                         var position = locationParse(result['location']);
                         var place_type = result['place_type'];
                         var place_id = parseInt(result['place_id']);
@@ -604,6 +680,105 @@ function addMarkerListeners(marker) {
             currentInfoWindow = null;
         }
     });
+    google.maps.event.addListener(marker, 'click', function () {
+            if (currentEventDivMarker == this) {
+                return;
+            }
+            $.ajax({
+                url: '/event/data?request=current_events&time=' + selectedTime + '&place=' + this.place_id,
+                success: function (result) {
+                    var event = JSON.parse(result['events'])[0];
+                    if (currentEventDivMarker) {
+                        closeEventDiv();
+                        setTimeout(function () {
+                            clearEventDiv();
+                            createEventDiv(event);
+                            openEventDiv(marker);
+                        }, 500);
+
+                    } else {
+                        createEventDiv(event);
+                        openEventDiv(marker);
+                    }
+
+                }
+            });
+        }
+    )
+    ;
+}
+function createEventDiv(event) {
+    document.getElementById('event_title').innerHTML = event.fields.title;
+    var amazingslider = document.createElement('div');
+    amazingslider.setAttribute('id', 'amazingslider-1');
+    amazingslider.setAttribute('style', 'display:block;position:relative;margin:0 auto; width: 600px; height: 400px');
+    document.getElementById('amazingslider-wrapper-1').appendChild(amazingslider);
+    var ul = document.createElement('ul');
+    ul.setAttribute('class', 'amazingslider-slides');
+    ul.setAttribute('id', 'slider_contents');
+    ul.setAttribute('style', 'display:none;');
+    amazingslider.appendChild(ul);
+    var li = document.createElement('li');
+    var a = document.createElement('a');
+    document.getElementById('slider_contents').appendChild(li);
+    a.setAttribute('href', '/media/' + event.fields.image);
+    a.setAttribute('class', 'html5lightbox');
+    li.appendChild(a);
+    var img = document.createElement('img');
+    img.setAttribute('src', '/media/' + event.fields.image);
+    a.appendChild(img);
+    $.ajax({
+        url: '/event/data?request=files&event=' + event.pk,
+        success: function (result) {
+            var files = JSON.parse(result['files']);
+            console.log(files);
+            for (var i = 0; i < files.length; i++) {
+                var li = document.createElement('li');
+                var a = document.createElement('a');
+                document.getElementById('slider_contents').appendChild(li);
+                a.setAttribute('href', '/media/' + files[i].fields.file_field);
+                a.setAttribute('class', 'html5lightbox');
+                li.appendChild(a);
+                var img = document.createElement('img');
+                if (files[i].fields.type == 'video') {
+                    img.setAttribute('data-src', '/media/' + files[i].fields.poster);
+                } else if (files[i].fields.type == 'image') {
+                    img.setAttribute('src', '/media/' + files[i].fields.file_field);
+                }
+                a.appendChild(img);
+            }
+            setTimeout(function () {
+                var script1 = document.createElement('script');
+                script1.setAttribute('src', '/static/js/initslider-1.js');
+                script1.setAttribute('id', 'slider_script');
+                document.head.appendChild(script1);
+            }, 500);
+
+        }
+    });
+    document.getElementById('event_time').innerHTML = event.fields.duration;
+    document.getElementById('event_schedule').innerHTML = event.fields.schedule_text;
+    document.getElementById('event_description').innerHTML = event.fields.description;
+
+}
+function closeEventDiv() {
+    document.getElementById('event_div').style.width = 0;
+    currentEventDivMarker = null;
+}
+function openEventDiv(marker) {
+    document.getElementById('event_div').style.width = '700px';
+    currentEventDivMarker = marker;
+}
+
+function clearEventDiv() {
+    var script = document.getElementById('slider_script');
+    script.parentNode.removeChild(script);
+    var sliderDiv = document.getElementById('amazingslider-wrapper-1');
+    sliderDiv.innerHTML = '';
+    document.getElementById('event_title').innerHTML = '';
+    document.getElementById('event_time').innerHTML = '';
+    document.getElementById('event_schedule').innerHTML = '';
+    document.getElementById('event_description').innerHTML = '';
 }
 
 function addZoomListener() {
@@ -617,6 +792,15 @@ function addZoomListener() {
                 markers[j].setIcon(markers[j].tempIcon);
             }
 
+        }
+        if (map.getZoom() > 13) {
+            for (var i = 0 ; i < zones.length ; i++) {
+                zones[i].setMap(map);
+            }
+        } else {
+            for (var i = 0 ; i < zones.length ; i++) {
+                zones[i].setMap(null);
+            }
         }
 
     });
@@ -877,4 +1061,34 @@ function addCloseInfoWindowMapListener() {
             currentInfoWindow = null;
         }
     });
+}
+
+function getFacilities() {
+    $.ajax({
+        url: '/event/data?request=facility',
+        success: function (result) {
+            var facilities = JSON.parse(result['facilities']);
+            var facilityDiv = document.getElementById('facilities_div');
+            for (var i = 0; i < facilities.length; i++) {
+                var facilityItem = document.createElement('div');
+                facilityItem.setAttribute('class', 'facility_item');
+                facilityDiv.appendChild(facilityItem);
+                var name = facilities[i].fields.name;
+                var id = 'fac_' + i;
+                var label = document.createElement('label');
+                label.setAttribute('for', id);
+                label.innerHTML = name;
+                facilityItem.appendChild(label);
+                var checkbox = document.createElement('input');
+                checkbox.setAttribute('type', 'checkbox');
+                checkbox.setAttribute('id', id);
+                facilityItem.appendChild(checkbox);
+            }
+            var br = document.createElement('br');
+            br.setAttribute('style', 'clear: both;');
+            facilityDiv.appendChild(br);
+        }
+    });
+
+
 }
