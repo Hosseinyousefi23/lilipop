@@ -8,7 +8,7 @@ var markers = [];
 var paths = [];
 var zones = [];
 var showMarkers = true;
-var clearButtonDiv;
+var clearButton;
 var mapClickMenuListener;
 var embeddedList = [];
 var currentMarker = null;
@@ -324,7 +324,9 @@ function Menu() {
     };
     menu.open = function () {
         menu.showOpacity();
-        document.getElementById("menu").style.width = "198px";
+        document.getElementById("menu").style.right = "0";
+        document.getElementById("reserve_div").style.right = "-402";
+        document.getElementById("aboutus_div").style.right = "-202";
         setTimeout(function () {
             mapClickMenuListener = map.addListener('mousedown', menu.close);
         }, 500)
@@ -336,11 +338,15 @@ function Menu() {
             menu.closeSubMenu();
             document.getElementById('triangle-right').style.display = 'none';
             setTimeout(function () {
-                document.getElementById("menu").style.width = 0;
+                document.getElementById("menu").style.right = "-198px";
+                document.getElementById("reserve_div").style.right = "-600px";
+                document.getElementById("aboutus_div").style.right = "-400px";
                 menu.hideOpacity();
             }, 500);
         } else {
-            document.getElementById("menu").style.width = 0;
+            document.getElementById("menu").style.right = "-198px";
+            document.getElementById("reserve_div").style.right = "-600px";
+            document.getElementById("aboutus_div").style.right = "-400px";
             menu.hideOpacity();
         }
         google.maps.event.removeListener(mapClickMenuListener);
@@ -351,7 +357,7 @@ function Menu() {
         menu.close();
     };
     menu.hide = function () {
-        document.getElementById("menu").style.width = 0;
+        document.getElementById("menu").style.right = "-198px";
         document.getElementById('triangle-right').style.display = 'none';
         document.getElementById('reserve_div').style.right = 0;
         menu.hideOpacity();
@@ -359,7 +365,7 @@ function Menu() {
         mapClickMenuListener = null;
     };
     menu.unhide = function () {
-        document.getElementById('menu').style.width = '198px';
+        document.getElementById('menu').style.right = '0';
         document.getElementById('reserve_div').style.right = '200px';
         mapClickMenuListener = map.addListener('mousedown', menu.close);
         menu.showOpacity();
@@ -375,22 +381,22 @@ function Menu() {
         }
         if (menu.selectedMenuItem) {
             menu.closeSubMenu();
-            reserveLink.style.backgroundColor = '#6DCFF6';
+            //reserveLink.style.backgroundColor = '#6DCFF6';
             //reserveLink.style.borderStyle = 'inset';
-            document.getElementById('triangle-right').style.top = '94px';
+            document.getElementById('triangle-right').style.top = '90px';
             menu.selectedMenuItem = reserveLink;
             menu.selectedMenuDiv = document.getElementById('reserve_div');
             setTimeout(function () {
-                document.getElementById('reserve_div').style.width = '600px';
+                document.getElementById('reserve_div').style.right = '200px';
             }, 500);
         } else {
             menu.selectedMenuItem = reserveLink;
             menu.selectedMenuDiv = document.getElementById('reserve_div');
-            reserveLink.style.backgroundColor = '#6DCFF6';
+            //reserveLink.style.backgroundColor = '#6DCFF6';
             //reserveLink.style.borderStyle = 'inset';
             document.getElementById('triangle-right').style.display = 'block';
-            document.getElementById('triangle-right').style.top = '94px';
-            document.getElementById('reserve_div').style.width = '600px';
+            document.getElementById('triangle-right').style.top = '90px';
+            document.getElementById('reserve_div').style.right = '200px';
         }
     };
     menu.closeReserveMenu = function () {
@@ -413,8 +419,8 @@ function Menu() {
         menu.selectedMenuItem = null;
         menu.selectedMenuDiv = null;
         var reserveLink = document.getElementById('reserve_link');
-        document.getElementById('reserve_div').style.width = 0;
-        reserveLink.style.backgroundColor = 'transparent';
+        document.getElementById('reserve_div').style.right = "-402px";
+        //reserveLink.style.backgroundColor = 'transparent';
         //reserveLink.style.borderStyle = 'none';
         //reserveLink.style.borderBottom = 'solid #e1e1e1 2px';
     };
@@ -422,7 +428,7 @@ function Menu() {
         menu.selectedMenuItem = null;
         menu.selectedMenuDiv = null;
         var aboutusLink = document.getElementById('aboutus_link');
-        document.getElementById('aboutus_div').style.width = 0;
+        document.getElementById('aboutus_div').style.right = "-202px";
         aboutusLink.style.backgroundColor = 'transparent';
         //aboutusLink.style.borderStyle = 'none';
         aboutusLink.style.borderBottom = 'solid #e1e1e1 2px';
@@ -435,22 +441,22 @@ function Menu() {
         }
         if (menu.selectedMenuItem) {
             menu.closeSubMenu();
-            aboutusLink.style.backgroundColor = '#6DCFF6';
+            //aboutusLink.style.backgroundColor = '#6DCFF6';
             //aboutusLink.style.borderStyle = 'inset';
-            document.getElementById('triangle-right').style.top = '163px';
+            document.getElementById('triangle-right').style.top = '159px';
             menu.selectedMenuItem = aboutusLink;
             menu.selectedMenuDiv = document.getElementById('aboutus_div');
             setTimeout(function () {
-                document.getElementById('aboutus_div').style.width = '400px';
+                document.getElementById('aboutus_div').style.right = '198px';
             }, 500);
         } else {
             menu.selectedMenuItem = aboutusLink;
             menu.selectedMenuDiv = document.getElementById('aboutus_div');
-            aboutusLink.style.backgroundColor = '#6DCFF6';
+            //aboutusLink.style.backgroundColor = '#6DCFF6';
             //aboutusLink.style.borderStyle = 'inset';
             document.getElementById('triangle-right').style.display = 'block';
-            document.getElementById('triangle-right').style.top = '163px';
-            document.getElementById('aboutus_div').style.width = '400px';
+            document.getElementById('triangle-right').style.top = '159px';
+            document.getElementById('aboutus_div').style.right = '198px';
         }
     };
     menu.closeSubMenu = function () {
@@ -533,7 +539,7 @@ function initMap() {
         ]
     });
     map.addListener('click', function () {
-        document.getElementById('event_div').style.width = 0;
+        closeEventDiv();
     });
     addTuicLogo();
     addProjectLogo();
@@ -762,11 +768,11 @@ function createEventDiv(event) {
 
 }
 function closeEventDiv() {
-    document.getElementById('event_div').style.width = 0;
+    document.getElementById('event_div').style.right = "-700px";
     currentEventDivMarker = null;
 }
 function openEventDiv(marker) {
-    document.getElementById('event_div').style.width = '700px';
+    document.getElementById('event_div').style.right = '0';
     currentEventDivMarker = marker;
 }
 
@@ -794,11 +800,11 @@ function addZoomListener() {
 
         }
         if (map.getZoom() > 13) {
-            for (var i = 0 ; i < zones.length ; i++) {
+            for (var i = 0; i < zones.length; i++) {
                 zones[i].setMap(map);
             }
         } else {
-            for (var i = 0 ; i < zones.length ; i++) {
+            for (var i = 0; i < zones.length; i++) {
                 zones[i].setMap(null);
             }
         }
@@ -969,23 +975,22 @@ function startDeleteMenu() {
 }
 
 function createClearButton() {
-    clearButtonDiv = document.createElement('div');
-    clearButtonDiv.style.backgroundColor = '#fff';
-    clearButtonDiv.style.border = '2px solid #fff';
-    clearButtonDiv.style.borderRadius = '3px';
-    clearButtonDiv.style.boxShadow = '0 2px 6px rgba(0,0,0,.4)';
-    clearButtonDiv.style.cursor = 'pointer';
-    clearButtonDiv.style.marginBottom = '22px';
-    clearButtonDiv.style.textAlign = 'center';
-    clearButtonDiv.title = 'Clear';
-    var clearButton = document.createElement('button');
-    clearButton.style.fontFamily = 'Roboto,Arial,sans-serif';
-    clearButton.style.fontSize = '16px';
-    clearButton.style.lineHeight = '38px';
-    clearButton.style.paddingLeft = '5px';
-    clearButton.style.paddingRight = '5px';
+    clearButton = document.createElement('Button');
+    clearButton.setAttribute("class", "menu_button");
+    clearButton.style.backgroundColor = "#6DCFF6";
+    clearButton.style.display = "block";
+    clearButton.style.width = "90px";
+    clearButton.style.height = "90px";
+    clearButton.style.marginBottom = "10px";
+    //clearButton.style.backgroundColor = '#fff';
+    //clearButton.style.border = '2px solid #fff';
+    //clearButton.style.borderRadius = '3px';
+    //clearButton.style.boxShadow = '0 2px 6px rgba(0,0,0,.4)';
+    //clearButton.style.cursor = 'pointer';
+    //clearButton.style.marginBottom = '22px';
+    //clearButton.style.textAlign = 'center';
+    //clearButton.title = 'Clear';
     clearButton.innerHTML = 'Clear';
-    clearButtonDiv.appendChild(clearButton);
     clearButton.addEventListener('click', function (e) {
         e.preventDefault();
         currentPolygon.setMap(null);
@@ -1014,12 +1019,14 @@ function removeDoneButton() {
     document.getElementById('done_button').style.display = 'none';
 }
 function showClearButton() {
-    map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(clearButtonDiv);
+    console.log("clear");
+    map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(clearButton);
 
 }
 
 function removeClearButton() {
     map.controls[google.maps.ControlPosition.BOTTOM_CENTER].clear();
+    console.log("declear");
 }
 
 function locationParse(string) {

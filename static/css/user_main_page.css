@@ -29,7 +29,7 @@ html, body {
 
 .sidenav {
     height: 100%; /* 100% Full-height */
-    width: 0; /* 0 width - change this with JavaScript */
+    /*width: 0;  0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
     z-index: 2; /* Stay on top */
     top: 0;
@@ -38,13 +38,15 @@ html, body {
     padding-top: 20px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
     white-space: nowrap;
-    box-shadow: -5px 0 10px #666666;
+    /*box-shadow: -5px 0 10px #666666;*/
 }
 
 #menu {
-    right: 0;
+    right: -198px;
+    width: 198px;
     border-left: solid 2px rgb(225, 225, 225);
     box-shadow: none;
+    z-index: 3;
 }
 
 /* The navigation menu links */
@@ -101,7 +103,8 @@ html, body {
 }
 
 #reserve_div {
-    right: 200px;
+    right: -600px;
+    width: 600px;
     padding-top: 100px;
 }
 
@@ -307,7 +310,8 @@ html, body {
 }
 
 #aboutus_div {
-    right: 200px;
+    right: -400px;
+    width: 400px;
 }
 
 .delete-menu {
@@ -359,7 +363,8 @@ html, body {
 }
 
 #event_div {
-    right: 0;
+    right: -700px;
+    width: 700px;
 }
 
 #event_closebtn {
