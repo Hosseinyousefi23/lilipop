@@ -656,8 +656,8 @@ function addMarkerListeners(marker) {
                     var contentString;
                     if (event_obj.length > 0) {
                         contentString = '<div>'
-                        + '<img src="/media/' + event_obj[0].fields.image + '" style="width: 300px; height: 300px; margin-left: 24px; display: block"/>'
-                        + '<h2 style="width: 300px; text-align: center; margin-left: 24px; margin-top: 20px">' + event_obj[0].fields.title + '</h2>'
+                        + '<img src="/media/' + event_obj[0].fields.image + '" style="width: 220px; height: 220px; margin-left: 25px; display: block"/>'
+                        + '<h1 style="width: 220px; text-align: center; margin-left: 23px; margin-top: 20px">' + event_obj[0].fields.title + '</h1>'
                         + '</div>'
                     } else {
                         contentString = '<h2>No event for now</h2>'
@@ -665,7 +665,7 @@ function addMarkerListeners(marker) {
                     var infoWindow = new google.maps.InfoWindow({
                         content: contentString,
                         disableAutoPan: true,
-                        maxWidth: 324
+                        maxWidth: 250
                     });
                     infoWindow.open(map, marker);
                     infoWindows[parseInt(result['place_id'])] = infoWindow;
