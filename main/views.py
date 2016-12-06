@@ -2,6 +2,9 @@ from django.shortcuts import render
 
 
 def main_page(request):
+    # print(request.LANGUAGE_CODE)
+    # activate('fa')
+    # request.session[LANGUAGE_SESSION_KEY] = 'fa'
     if request.user.is_authenticated():
         name = '%s %s' % (request.user.first_name, request.user.last_name)
         return render(request, 'user_main_page.html', {'name': name})

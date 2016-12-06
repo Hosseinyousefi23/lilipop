@@ -22,6 +22,7 @@ var polygonRightClickListener;
 var mapMouseMoveListener;
 var events;
 var opacity;
+var triangle_tops = ['90px', '159px', '229px', '300px'];
 var currentPolygon;
 var menu = new Menu();
 var selectedMapUI = 'disable';
@@ -325,8 +326,10 @@ function Menu() {
     menu.open = function () {
         menu.showOpacity();
         document.getElementById("menu").style.right = "0";
+        document.getElementById("proposals_div").style.right = "-402px";
         document.getElementById("reserve_div").style.right = "-402";
         document.getElementById("aboutus_div").style.right = "-202";
+        document.getElementById("help_div").style.right = "-402px";
         setTimeout(function () {
             mapClickMenuListener = map.addListener('mousedown', menu.close);
         }, 500)
@@ -339,14 +342,18 @@ function Menu() {
             document.getElementById('triangle-right').style.display = 'none';
             setTimeout(function () {
                 document.getElementById("menu").style.right = "-198px";
+                document.getElementById("proposals_div").style.right = "-600px";
                 document.getElementById("reserve_div").style.right = "-600px";
                 document.getElementById("aboutus_div").style.right = "-400px";
+                document.getElementById("help_div").style.right = "-600px";
                 menu.hideOpacity();
             }, 500);
         } else {
             document.getElementById("menu").style.right = "-198px";
+            document.getElementById("proposals_div").style.right = "-600px";
             document.getElementById("reserve_div").style.right = "-600px";
             document.getElementById("aboutus_div").style.right = "-400px";
+            document.getElementById("help_div").style.right = "-600px";
             menu.hideOpacity();
         }
         google.maps.event.removeListener(mapClickMenuListener);
@@ -373,6 +380,33 @@ function Menu() {
             document.getElementById('triangle-right').style.display = 'block';
         }, 500);
     };
+    menu.openProposalsMenu = function (event) {
+        event.stopPropagation();
+        var proposalsLink = document.getElementById('proposals_link');
+        if (menu.selectedMenuItem == proposalsLink) {
+            return;
+        }
+        if (menu.selectedMenuItem) {
+            menu.closeSubMenu();
+            document.getElementById('triangle-right').style.top = triangle_tops[0];
+            menu.selectedMenuItem = proposalsLink;
+            menu.selectedMenuDiv = document.getElementById('proposals_div');
+            setTimeout(function () {
+                document.getElementById('proposals_div').style.right = '200px';
+            }, 500);
+        } else {
+            menu.selectedMenuItem = proposalsLink;
+            menu.selectedMenuDiv = document.getElementById('proposals_div');
+            document.getElementById('triangle-right').style.display = 'block';
+            document.getElementById('triangle-right').style.top = triangle_tops[0];
+            document.getElementById('proposals_div').style.right = '200px';
+        }
+    };
+    menu.closeProposalMenu = function (event) {
+        menu.selectedMenuItem = null;
+        menu.selectedMenuDiv = null;
+        document.getElementById('proposals_div').style.right = "-402px";
+    };
     menu.openReserveMenu = function (event) {
         event.stopPropagation();
         var reserveLink = document.getElementById('reserve_link');
@@ -383,7 +417,7 @@ function Menu() {
             menu.closeSubMenu();
             //reserveLink.style.backgroundColor = '#6DCFF6';
             //reserveLink.style.borderStyle = 'inset';
-            document.getElementById('triangle-right').style.top = '90px';
+            document.getElementById('triangle-right').style.top = triangle_tops[1];
             menu.selectedMenuItem = reserveLink;
             menu.selectedMenuDiv = document.getElementById('reserve_div');
             setTimeout(function () {
@@ -395,7 +429,7 @@ function Menu() {
             //reserveLink.style.backgroundColor = '#6DCFF6';
             //reserveLink.style.borderStyle = 'inset';
             document.getElementById('triangle-right').style.display = 'block';
-            document.getElementById('triangle-right').style.top = '90px';
+            document.getElementById('triangle-right').style.top = triangle_tops[1];
             document.getElementById('reserve_div').style.right = '200px';
         }
     };
@@ -420,6 +454,7 @@ function Menu() {
         menu.selectedMenuDiv = null;
         var reserveLink = document.getElementById('reserve_link');
         document.getElementById('reserve_div').style.right = "-402px";
+        hideAllInvalidForms();
         //reserveLink.style.backgroundColor = 'transparent';
         //reserveLink.style.borderStyle = 'none';
         //reserveLink.style.borderBottom = 'solid #e1e1e1 2px';
@@ -427,11 +462,7 @@ function Menu() {
     menu.closeAboutusMenu = function () {
         menu.selectedMenuItem = null;
         menu.selectedMenuDiv = null;
-        var aboutusLink = document.getElementById('aboutus_link');
         document.getElementById('aboutus_div').style.right = "-202px";
-        aboutusLink.style.backgroundColor = 'transparent';
-        //aboutusLink.style.borderStyle = 'none';
-        aboutusLink.style.borderBottom = 'solid #e1e1e1 2px';
     };
     menu.openAboutusMenu = function (event) {
         event.stopPropagation();
@@ -443,7 +474,7 @@ function Menu() {
             menu.closeSubMenu();
             //aboutusLink.style.backgroundColor = '#6DCFF6';
             //aboutusLink.style.borderStyle = 'inset';
-            document.getElementById('triangle-right').style.top = '159px';
+            document.getElementById('triangle-right').style.top = triangle_tops[2];
             menu.selectedMenuItem = aboutusLink;
             menu.selectedMenuDiv = document.getElementById('aboutus_div');
             setTimeout(function () {
@@ -455,15 +486,46 @@ function Menu() {
             //aboutusLink.style.backgroundColor = '#6DCFF6';
             //aboutusLink.style.borderStyle = 'inset';
             document.getElementById('triangle-right').style.display = 'block';
-            document.getElementById('triangle-right').style.top = '159px';
+            document.getElementById('triangle-right').style.top = triangle_tops[2];
             document.getElementById('aboutus_div').style.right = '198px';
         }
     };
+    menu.openHelpMenu = function (event) {
+        event.stopPropagation();
+        var helpLink = document.getElementById('help_link');
+        if (menu.selectedMenuItem == helpLink) {
+            return;
+        }
+        if (menu.selectedMenuItem) {
+            menu.closeSubMenu();
+            document.getElementById('triangle-right').style.top = triangle_tops[3];
+            menu.selectedMenuItem = helpLink;
+            menu.selectedMenuDiv = document.getElementById('help_div');
+            setTimeout(function () {
+                document.getElementById('help_div').style.right = '200px';
+            }, 500);
+        } else {
+            menu.selectedMenuItem = helpLink;
+            menu.selectedMenuDiv = document.getElementById('help_div');
+            document.getElementById('triangle-right').style.display = 'block';
+            document.getElementById('triangle-right').style.top = triangle_tops[3];
+            document.getElementById('help_div').style.right = '200px';
+        }
+    };
+    menu.closeHelpMenu = function () {
+        menu.selectedMenuItem = null;
+        menu.selectedMenuDiv = null;
+        document.getElementById('help_div').style.right = "-402px";
+    };
     menu.closeSubMenu = function () {
-        if (menu.selectedMenuDiv == document.getElementById('reserve_div')) {
+        if (menu.selectedMenuDiv == document.getElementById('proposals_div')) {
+            menu.closeProposalMenu()
+        } else if (menu.selectedMenuDiv == document.getElementById('reserve_div')) {
             menu.closeReserveMenu();
         } else if (menu.selectedMenuDiv == document.getElementById('aboutus_div')) {
             menu.closeAboutusMenu();
+        } else if (menu.selectedMenuDiv == document.getElementById('help_div')) {
+            menu.closeHelpMenu();
         }
     };
     menu.selectPlace = function (img) {
@@ -485,6 +547,7 @@ function Menu() {
         document.getElementById('location_img').setAttribute('src', '/static/icons/menu/location.png');
         mapUI[imgName]();
         selectedMapUI = imgName;
+
     };
 }
 function initMap() {
@@ -541,6 +604,7 @@ function initMap() {
     map.addListener('click', function () {
         closeEventDiv();
     });
+    addLanguageUI();
     addTuicLogo();
     addProjectLogo();
     addMenuIcon();
@@ -615,10 +679,16 @@ function draw(time) {
         }
     })
 }
+function addLanguageUI() {
+    var langDiv = document.getElementById('lang_div');
+    map.controls[google.maps.ControlPosition.LEFT_TOP].push(langDiv);
+    langDiv.style.display = 'block';
+
+}
 
 function addTuicLogo() {
     var controlUI = document.createElement('div');
-    controlUI.style.marginTop = '50px';
+    controlUI.style.marginTop = '30px';
     controlUI.style.marginLeft = '40px';
     var image = document.createElement('img');
     image.setAttribute('src', '/static/icons/map/tuic_logo.png');
@@ -1070,6 +1140,132 @@ function addCloseInfoWindowMapListener() {
     });
 }
 
+
+function submitProposal() {
+    var border = "solid 2px red";
+    var hasError = false;
+    if (!menu.selectedPlaceImg) {
+        showInvalidFormJQ($("#select_place_div"));
+        hasError = true;
+    } else {
+        hideInvalidFormJQ($("#select_place_div"))
+    }
+    if (!menu.hasLocation) {
+        showInvalidFormJQ($("#select_location_div"));
+        hasError = true;
+    } else {
+        hideInvalidFormJQ($("#select_location_div"));
+    }
+    if (!$("#select_time_div input[type='text']")[0].value) {
+        showInvalidForm($(".time_div")[0].children[1]);
+        hasError = true;
+    } else {
+        hideInvalidForm($(".time_div")[0].children[1]);
+    }
+    if (!$("#select_time_div input[type='text']")[1].value) {
+        showInvalidForm($(".time_div")[1].children[1]);
+        hasError = true;
+    } else {
+        hideInvalidForm($(".time_div")[1].children[1]);
+    }
+    if (!$("#title_text").val()) {
+        showInvalidFormJQ($("#title_text"));
+        hasError = true;
+    } else {
+        hideInvalidFormJQ($("#title_text"));
+    }
+    if (!$("#description_text").val()) {
+        showInvalidFormJQ($("#description_text"));
+        hasError = true;
+    } else {
+        hideInvalidFormJQ($("#description_text"));
+    }
+
+    if (!hasError) {
+        var csrttoken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+        var place_type = document.getElementById('place_type_input').getAttribute('value');
+        var locations_str = "";
+        for (var i = 0; i < locations.length; i++) {
+            locations_str += locations[i].lat + "," + locations[i].lng;
+            if (i != locations.length - 1) {
+                locations_str += ';'
+            }
+        }
+        var start_date = $("#select_time_div input[type='text']")[0].value.split(' ')[0].split('/').join(';');
+        var end_date = $("#select_time_div input[type='text']")[1].value.split(' ')[0].split('/').join(';');
+        var schedule = "";
+        var weekdays = ['sat', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri'];
+        var dropdown = $('.dropdown-menu');
+        for (var i = 0; i < 7; i++) {
+            if (dropdown.children()[i].children[0].children[0].checked) {
+                schedule += weekdays[i] + ',' + dropdown.children()[i].children[1].value + ',' + dropdown.children()[i].children[3].value;
+                schedule += ';';
+            }
+        }
+        if (schedule.length != 0) {
+            schedule = schedule.substring(0, schedule.length - 1);
+        }
+        var title = $('#title_text').val();
+        var description = $('#description_text').val();
+        var all_facilities = $('.facility_item').find('input');
+        var facilities = '';
+        for (var i = 0; i < all_facilities.length; i++) {
+            if (all_facilities[i].checked) {
+                facilities += all_facilities[i].value + ',';
+            }
+        }
+        if (facilities.length > 0) {
+            facilities = facilities.substring(0, facilities.length - 1);
+        }
+        var postData = {
+            place_type: place_type,
+            locations: locations_str,
+            start_date: start_date,
+            end_date: end_date,
+            schedule: schedule,
+            title: title,
+            description: description,
+            facilities: facilities,
+            csrfmiddlewaretoken: csrttoken
+        };
+        $.ajax({
+            type: "POST", url: '/event/reserve', data: postData, success: function (result) {
+                console.log(result);
+            }
+        });
+    }
+
+}
+function showInvalidFormJQ(element) {
+    element.addClass("error");
+    element.on("click", function () {
+        hideInvalidFormJQ(element);
+    });
+}
+function showInvalidForm(element) {
+    element.className += " error";
+    element.addEventListener("click", function () {
+        hideInvalidForm(element);
+    });
+}
+function hideInvalidFormJQ(element) {
+    element.removeClass("error");
+}
+function hideInvalidForm(element) {
+    var len = element.className.length;
+    if (element.className.substring(len - 6, len) == " error") {
+        element.className = element.className.substring(0, len - 6)
+    }
+
+}
+function hideAllInvalidForms() {
+    hideInvalidFormJQ($("#select_place_div"));
+    hideInvalidFormJQ($("#select_location_div"));
+    hideInvalidForm($(".time_div")[0].children[1]);
+    hideInvalidForm($(".time_div")[1].children[1]);
+    hideInvalidFormJQ($("#title_text"), "1px solid");
+    hideInvalidFormJQ($("#description_text"));
+}
 function getFacilities() {
     $.ajax({
         url: '/event/data?request=facility',
@@ -1089,6 +1285,8 @@ function getFacilities() {
                 var checkbox = document.createElement('input');
                 checkbox.setAttribute('type', 'checkbox');
                 checkbox.setAttribute('id', id);
+                checkbox.setAttribute('name', 'facility');
+                checkbox.setAttribute('value', name);
                 facilityItem.appendChild(checkbox);
             }
             var br = document.createElement('br');
@@ -1099,3 +1297,4 @@ function getFacilities() {
 
 
 }
+

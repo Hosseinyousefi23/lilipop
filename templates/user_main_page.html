@@ -1,9 +1,10 @@
+{% load i18n %}
 {% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Main Page</title>
+    <title>{% trans 'Main Page' %}</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <link rel="stylesheet" href="{% static 'css/ADM-dateTimePicker.min.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css' %}"/>
@@ -18,14 +19,28 @@
     <script src="{% static 'js/user_main_page.js' %}"></script>
 </head>
 <body>
+<div id="lang_div">
+    {% get_current_language as currentLang %}
+    {% if currentLang == 'fa' %}
+        <a href="{% url 'event:changelang' %}?lang=en">English</a>
+        <span>|</span>
+        <span>فارسی</span>
+    {% else %}
+        <span>English</span>
+        <span>|</span>
+        <a href="{% url 'event:changelang' %}?lang=fa">فارسی</a>
+    {% endif %}
+</div>
 <div id="menu" class="sidenav" dir="rtl"
      onclick="menu.closeSubMenu(); document.getElementById('triangle-right').style.display = 'none';">
     <div id="closebtndiv">
         <a href="javascript:void(0)" id="closebtn" onclick="menu.closeButton(event)"><b>&times;</b></a>
     </div>
     <div id="menudiv">
+        <a id="proposals_link" onclick="menu.openProposalsMenu(event)">Proposals</a>
         <a id="reserve_link" onclick="menu.openReserveMenu(event)">Reserve</a>
         <a id="aboutus_link" onclick="menu.openAboutusMenu(event)">About us</a>
+        <a id="help_link" onclick="menu.openHelpMenu(event)">Help</a>
         <a href="{% url 'userman:logout' %}">Logout</a>
     </div>
     <div id="links">
@@ -37,6 +52,9 @@
     </div>
 </div>
 <div id="triangle-right"></div>
+<div class="sidenav" id="proposals_div" dir="rtl">
+    {#    d#}
+</div>
 <div class="sidenav" id="reserve_div" dir="rtl">
     <script>
         app = angular.module('myApp', ['ADM-dateTimePicker']);
@@ -52,6 +70,7 @@
         }]);
     </script>
     <form ng-app="myApp">
+        {% csrf_token %}
         <div id="select_place_div" class="form_part">
             <h2>Place</h2>
 
@@ -85,12 +104,14 @@
 
             <div class="time_div">
                 <h2>start</h2>
-                <adm-dtp ng-model="date1" options='date_options' full-data="date1_detail" class="time-picker"
+                <adm-dtp ng-model="date1" options='date_options'
+                         full-data="date1_detail" class="time-picker"
                          maxdate="{% verbatim %} {{ date2_detail.unix }} {% endverbatim %}"></adm-dtp>
             </div>
             <div class="time_div">
                 <h2>end</h2>
-                <adm-dtp ng-model="date2" options='date_options' full-data="date2_detail" class="time-picker"
+                <adm-dtp ng-model="date2" options='date_options'
+                         full-data="date2_detail" class="time-picker"
                          mindate="{% verbatim %} {{ date1_detail.unix }} {% endverbatim %}"></adm-dtp>
             </div>
             <div id="time_schedule_div">
@@ -242,11 +263,15 @@
 
             <div id="facilities_div">
             </div>
+            <input type="submit" value="Submit" onclick="submitProposal()">
         </div>
     </form>
 </div>
 <div class="sidenav" id="aboutus_div" dir="rtl">
     <h1 style="width: 100% margin: 0; text-align: center ; padding: 400px 0"><b>TUIC</b></h1>
+</div>
+<div class="sidenav" id="help_div" dir="rtl">
+
 </div>
 <div class="sidenav" id="event_div" dir="rtl">
     <div id="event_closebtndiv">

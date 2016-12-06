@@ -4,8 +4,10 @@
       <w>aboutus</w>
       <w>backends</w>
       <w>beachflag</w>
+      <w>changelang</w>
       <w>clickable</w>
       <w>crosshair</w>
+      <w>csrfmiddlewaretoken</w>
       <w>curlat</w>
       <w>curlng</w>
       <w>geoposition</w>

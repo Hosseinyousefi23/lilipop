@@ -108,6 +108,16 @@ html, body {
     padding-top: 100px;
 }
 
+#proposals_div {
+    right: -600px;
+    width: 600px;
+}
+
+#help_div {
+    right: -600px;
+    width: 600px;
+}
+
 .form_part {
     margin-right: 55px;
 }
@@ -298,6 +308,19 @@ html, body {
     width: 69%;
 }
 
+#lang_div {
+    font-size: 20px;
+    margin-left: 33px;
+    margin-top: 18px;
+    display: none;
+
+}
+
+#lang_div a {
+    text-decoration: none;
+    color: #009cde;
+}
+
 #description_text {
     width: 89%;
     height: 200px;
@@ -395,4 +418,8 @@ html, body {
     overflow-y: auto;
     white-space: normal;
     margin: 0 7% 0 0;
+}
+
+.error {
+    border: 1px solid red;
 }

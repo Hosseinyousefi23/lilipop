@@ -20,7 +20,7 @@ class Facility(models.Model):
 
 class PlaceType(models.Model):
     # There are 3 types so far: Container gallery (container_gallery) , Mobile media unit (mobile_media_unit) ,
-    # Embedded culture (embedded_culture)
+    # Smart furniture (smart_furniture)
     frontend_name = models.CharField(max_length=100)
     backend_name = models.CharField(max_length=100)
 
@@ -55,9 +55,10 @@ class Proposal(models.Model):
     place_type = models.ForeignKey(PlaceType)
     submission_time = models.DateTimeField(default=timezone.now)
     description = models.CharField(max_length=1000)
-    subject = models.ForeignKey(Subject)
+    subject = models.ForeignKey(Subject, null=True)
+    title = models.CharField(max_length=100)
     owner = models.ForeignKey(User)
-    extra_facilities = models.ManyToManyField(Facility, blank=True)
+    extra_facilities = models.ManyToManyField(Facility, blank=True, related_name='proposal')
 
 
 class ProposalLocation(models.Model):

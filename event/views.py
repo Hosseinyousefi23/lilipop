@@ -1,27 +1,43 @@
+from _decimal import Decimal
 import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
-from django.http.response import HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.http.response import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.urls.base import reverse
 from django.utils import timezone
+from django.utils.translation import activate, LANGUAGE_SESSION_KEY
+from geoposition import Geoposition
 
-from event.Forms import ReserveForm
-from event.models import PlaceType, Event, Place, Facility, File, PlaceLocation
+from event.models import PlaceType, Event, Place, Facility, File, PlaceLocation, Proposal, ProposalLocation
 
 
 @login_required
 def reserve(request):
-    if request.method == 'POST':
-        form = ReserveForm(request.POST)
-        if form.is_valid():
-            reserve_obj = form.save()
-            reserve_obj.save()
-            return render(request, 'user_message_reserved.html', {'num': 923344123})
+    place_type_str = request.POST['place_type']
+    place_type = PlaceType.objects.get(backend_name=place_type_str)
+    description = request.POST['description']
+    title = request.POST['title']
+    owner = request.user
+    proposal = Proposal(place_type=place_type, description=description, title=title, owner=owner)
+    proposal.save()
 
-    else:
-        form = ReserveForm()
-        return render(request, 'user_reserve.html', {'form': form, 'location_types': PlaceType.objects.all})
+    locations_str = request.POST['locations']
+    locations_array = locations_str.split(';')
+    for loc in locations_array:
+        latlng = loc.split(',')
+        lat = Decimal(latlng[0])
+        lng = Decimal(latlng[1])
+        pos = Geoposition(lat, lng)
+        location = ProposalLocation(position=pos, proposal=proposal)
+        location.save()
+
+    facilities_str = request.POST['facilities']
+    facilities_array = facilities_str.split(',')
+    for fac in facilities_array:
+        facility_item = Facility.objects.get(name=fac)
+        proposal.extra_facilities.add(facility_item)
+    return HttpResponse('ok')
 
 
 def location_types(request):
@@ -99,7 +115,12 @@ def send_data(request):
         place_id = int(request.GET['place'])
         place = Place.objects.get(pk=place_id)
         return JsonResponse({'zone': serializers.serialize('json', PlaceLocation.objects.filter(place=place))})
+    elif request.GET['request'] == 'lang':
+        return HttpResponse(request.LANGUAGE_CODE)
 
 
-def my_events(request):
-    return render(request, 'user_my_events.html', {})
+def change_lang(request):
+    lang = request.GET['lang']
+    activate(lang)
+    request.session[LANGUAGE_SESSION_KEY] = lang
+    return HttpResponseRedirect(reverse('main:main_page'))
