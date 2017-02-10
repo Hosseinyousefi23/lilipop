@@ -381,7 +381,8 @@ a:active, a:hover {
 }
 
 .ADMdtp-container .ADMdtp-calendar-container .days > span > span.valid {
-    background: #fff6f3;
+    /*background: #fff6f3;*/
+    background: #0EA7E0;
     border-radius: 0
 }
 

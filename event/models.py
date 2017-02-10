@@ -12,10 +12,11 @@ class Subject(models.Model):
 
 
 class Facility(models.Model):
-    name = models.CharField(max_length=100)
+    english_name = models.CharField(max_length=100, default='no name')
+    persian_name = models.CharField(max_length=100, default='no name')
 
     def __str__(self):
-        return self.name
+        return self.english_name
 
 
 class PlaceType(models.Model):
@@ -53,12 +54,29 @@ class SpaceTimePoint(models.Model):
 
 class Proposal(models.Model):
     place_type = models.ForeignKey(PlaceType)
-    submission_time = models.DateTimeField(default=timezone.now)
+    submission_time = models.DateTimeField(default=timezone.now, null=True, blank=True)
+    save_time = models.DateTimeField(default=timezone.now)
+    last_change_time = models.DateTimeField(default=timezone.now)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    jalali_start_date_txt = models.CharField(max_length=100)
+    jalali_end_date_txt = models.CharField(max_length=100)
+    schedule_txt = models.CharField(max_length=200)
     description = models.CharField(max_length=1000)
-    subject = models.ForeignKey(Subject, null=True)
+    subject = models.ForeignKey(Subject, null=True, blank=True)
     title = models.CharField(max_length=100)
     owner = models.ForeignKey(User)
     extra_facilities = models.ManyToManyField(Facility, blank=True, related_name='proposal')
+    status = models.CharField(choices=(
+        ('not submitted', 'not submitted'),
+        ('pending approval', 'pending approval'),
+        ('submitted', 'submitted')
+    ), max_length=100)
+    status_fa = models.CharField(choices=(
+        ('ثبت نشده', 'ثبت نشده'),
+        ('در انتظار تایید', 'در انتظار تایید'),
+        ('ثبت شده', 'ثبت شده')
+    ), max_length=100)
 
 
 class ProposalLocation(models.Model):
@@ -115,4 +133,10 @@ class Text(models.Model):
 
 class PlaceLocation(models.Model):
     location = GeopositionField()
-    place = models.ForeignKey(Place, null=True , related_name='area_point_set')
+    place = models.ForeignKey(Place, null=True, related_name='area_point_set')
+
+
+class AboutUs(models.Model):
+    picture = models.ImageField(upload_to='files/aboutus')
+    english_text = models.CharField(max_length=10000)
+    persian_text = models.CharField(max_length=10000)

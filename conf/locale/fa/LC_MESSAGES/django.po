@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-06 20:53+0330\n"
+"POT-Creation-Date: 2017-01-03 14:18+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,3 +28,115 @@ msgstr "فارسی"
 #: .\templates\user_main_page.html:7
 msgid "Main Page"
 msgstr "صفحه اصلی"
+
+#: .\templates\user_main_page.html:44
+msgid "Proposals"
+msgstr "درخواست ها"
+
+#: .\templates\user_main_page.html:45
+msgid "Reserve"
+msgstr "رزرو"
+
+#: .\templates\user_main_page.html:46
+msgid "About us"
+msgstr "درباره ما"
+
+#: .\templates\user_main_page.html:47
+msgid "Help"
+msgstr "راهنمایی"
+
+#: .\templates\user_main_page.html:48
+msgid "Logout"
+msgstr "خروج"
+
+#: .\templates\user_main_page.html:62 .\templates\user_main_page.html:265
+msgid "Title"
+msgstr "عنوان"
+
+#: .\templates\user_main_page.html:63
+msgid "Start"
+msgstr "شروع"
+
+#: .\templates\user_main_page.html:64
+msgid "Last change"
+msgstr "آخرین تغییر"
+
+#: .\templates\user_main_page.html:65
+msgid "Actions"
+msgstr "عملیات"
+
+#: .\templates\user_main_page.html:66
+msgid "Status"
+msgstr "وضعیت"
+
+#: .\templates\user_main_page.html:88
+msgid "Place"
+msgstr "مکان"
+
+#: .\templates\user_main_page.html:102
+msgid "Location"
+msgstr "موقعیت"
+
+#: .\templates\user_main_page.html:118
+msgid "Start date"
+msgstr "تاریخ شروع"
+
+#: .\templates\user_main_page.html:124
+msgid "End date"
+msgstr "تاریخ اتمام"
+
+#: .\templates\user_main_page.html:136
+msgid "All"
+msgstr "همه"
+
+#: .\templates\user_main_page.html:145
+msgid "Saturday"
+msgstr "شنبه"
+
+#: .\templates\user_main_page.html:154
+msgid "Sunday"
+msgstr "یکشنبه"
+
+#: .\templates\user_main_page.html:163
+msgid "Monday"
+msgstr "دوشنبه"
+
+#: .\templates\user_main_page.html:172
+msgid "Tuesday"
+msgstr "سه شنبه"
+
+#: .\templates\user_main_page.html:181
+msgid "Wednesday"
+msgstr "چهارشنبه"
+
+#: .\templates\user_main_page.html:190
+msgid "Thursday"
+msgstr "پنجشنبه"
+
+#: .\templates\user_main_page.html:199
+msgid "Friday"
+msgstr "جمعه"
+
+#: .\templates\user_main_page.html:270
+msgid "Description"
+msgstr "توضیحات"
+
+#: .\templates\user_main_page.html:274
+msgid "Extra facilities"
+msgstr "امکانات اضافی"
+
+#: .\templates\user_main_page.html:278
+msgid "Save"
+msgstr "ذخیره"
+
+#: .\templates\user_main_page.html:282
+msgid "ltr"
+msgstr "rtl"
+
+#: .\templates\user_main_page.html:283
+msgid "TUIC"
+msgstr "مرکز نوآوری شهری"
+
+#: .\templates\user_main_page.html:326
+msgid "en"
+msgstr "fa"

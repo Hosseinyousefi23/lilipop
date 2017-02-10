@@ -1,10 +1,119 @@
-{% extends 'super_page.html' %}
+{% load i18n %}
 {% load static %}
-{% block title %}
-    <title>Main Page</title>
-{% endblock %}
-}
-{% block body %}
-    <h1>Welcome</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans 'Main Page' %}</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/ADM-dateTimePicker.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/w3.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user_main_page.css' %}">
+    <script src="{% static 'js/jquery.timepicker.min.js' %}"></script>
+    <script src="{% static 'js/angular.min.js' %}"></script>
+    <script src="{% static 'js/ADM-dateTimePicker.min.js' %}"></script>
+    <script src="{% static 'js/amazingslider.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/amazingslider-1.css' %}">
+    <script src="{% static 'js/main_page.js' %}"></script>
+</head>
+<body>
+<div id="lang_div">
+    {% get_current_language as currentLang %}
+    {% if currentLang == 'fa' %}
+        <a href="{% url 'event:changelang' %}?lang=en">English</a>
+        <span>|</span>
+        <span>فارسی</span>
+    {% else %}
+        <span>English</span>
+        <span>|</span>
+        <a href="{% url 'event:changelang' %}?lang=fa">فارسی</a>
+    {% endif %}
+</div>
+<div id="welcome_div">
+    <img src="{% static 'icons/map/welcome2.gif' %}" alt="Welcome">
 
-{% endblock %}
+    <div id="gif_triangle"></div>
+</div>
+<div id="menu" class="sidenav" dir="rtl"
+     onclick="menu.closeSubMenu(); document.getElementById('triangle-right').style.display = 'none';">
+    <div id="closebtndiv">
+        <a href="javascript:void(0)" id="closebtn" onclick="menu.closeButton(event)"><b>&times;</b></a>
+    </div>
+    <div id="menudiv">
+        <a id="login_link" onclick="menu.openLoginMenu(event)">{% trans 'Login' %}</a>
+        <a id="aboutus_link" onclick="menu.openAboutusMenu(event)">{% trans 'About us' %}</a>
+        <a id="help_link" onclick="menu.openHelpMenu(event)">{% trans 'Help' %}</a>
+    </div>
+    <div id="links">
+        <a href="#"><img src="{% static 'icons/menu/youtube.png' %}" width="25px"/></a>
+        <a href="#"><img src="{% static 'icons/menu/twitter.png' %}" width="25px"/></a>
+        <a href="#"><img src="{% static 'icons/menu/linkedin.png' %}" width="25px"/></a>
+        <a href="#"><img src="{% static 'icons/menu/instagram.png' %}" width="25px"/></a>
+        <a href="#"><img src="{% static 'icons/menu/facebook.png' %}" width="25px"/></a>
+    </div>
+</div>
+<div id="triangle-right"></div>
+
+<div class="sidenav" id="login_div">
+    <div class="login-page">
+        <div class="form">
+            <form class="register-form" method="post" action="{% url 'userman:signup' %}">
+                <input type="text" name='' placeholder="Username"/>
+                <input type="password" placeholder="password"/>
+                <input type="text" placeholder="email address"/>
+                <button>create</button>
+                <p class="message">Already registered? <a href="#">Sign In</a></p>
+            </form>
+            <form class="login-form" method="post" action="{% url 'userman:login' %}">
+                <input type="text" placeholder="username"/>
+                <input type="password" placeholder="password"/>
+                <button>login</button>
+                <p class="message">Not registered? <a href="#">Create an account</a></p>
+            </form>
+        </div>
+    </div>
+    <script>
+        $('.message a').click(function () {
+            $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+        });
+    </script>
+</div>
+<div class="sidenav" id="aboutus_div" dir="{% trans 'ltr' %}">
+    <h1 class="w3-center"><b>{% trans 'TUIC' %}</b></h1>
+
+    <div class="w3-content w3-display-container" id="aboutus_slideshow" dir="ltr"></div>
+    <div id="aboutus_text"></div>
+
+</div>
+<div class="sidenav" id="help_div" dir="rtl">
+
+</div>
+<div class="sidenav" id="event_div" dir="rtl">
+    <div id="event_closebtndiv">
+        <a href="javascript:void(0)" id="event_closebtn" onclick="closeEventDiv(event)"><b>&times;</b></a>
+    </div>
+    <h1 id="event_title"></h1>
+
+    <div id="amazingslider-wrapper-1" style="display:block;position:relative;max-width:600px;margin:0 auto 48px;">
+    </div>
+    <h2 id="event_time"></h2>
+
+    <h2 id="event_schedule"></h2>
+
+    <hr style="width: 500px; margin: 0 auto">
+
+    <h5 id="event_description"></h5>
+    <img src="{% static 'icons/menu/arrow_top.svg' %}" id="event_arrow_top" onclick="openOtherEvents()"/>
+</div>
+<div id="other_events_div">
+    <img src="{% static 'icons/menu/arrow_bot.svg' %}" id="event_arrow_bot" onclick="closeOtherEvents()"/>
+
+    <div id="other_events_cards"></div>
+</div>
+
+<div id="map"></div>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUdhNRJM-BAnT4hSvg-JHuK5vaKUzQ75Q&callback=initMap&language={% trans 'en' %}&v=3"></script>
+</body>
+</html>

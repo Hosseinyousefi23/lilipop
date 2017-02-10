@@ -8,9 +8,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <link rel="stylesheet" href="{% static 'css/ADM-dateTimePicker.min.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css' %}"/>
-    {#    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>#}
+    <link rel="stylesheet" href="{% static 'css/w3.css' %}">
     <link rel="stylesheet" href="{% static 'css/user_main_page.css' %}">
-    {#    <script src="{% static 'js/bootstrap.min.js' %}"></script>#}
     <script src="{% static 'js/jquery.timepicker.min.js' %}"></script>
     <script src="{% static 'js/angular.min.js' %}"></script>
     <script src="{% static 'js/ADM-dateTimePicker.min.js' %}"></script>
@@ -31,17 +30,22 @@
         <a href="{% url 'event:changelang' %}?lang=fa">فارسی</a>
     {% endif %}
 </div>
+<div id="welcome_div">
+    <img src="{% static 'icons/map/welcome2.gif' %}" alt="Welcome">
+
+    <div id="gif_triangle"></div>
+</div>
 <div id="menu" class="sidenav" dir="rtl"
      onclick="menu.closeSubMenu(); document.getElementById('triangle-right').style.display = 'none';">
     <div id="closebtndiv">
         <a href="javascript:void(0)" id="closebtn" onclick="menu.closeButton(event)"><b>&times;</b></a>
     </div>
     <div id="menudiv">
-        <a id="proposals_link" onclick="menu.openProposalsMenu(event)">Proposals</a>
-        <a id="reserve_link" onclick="menu.openReserveMenu(event)">Reserve</a>
-        <a id="aboutus_link" onclick="menu.openAboutusMenu(event)">About us</a>
-        <a id="help_link" onclick="menu.openHelpMenu(event)">Help</a>
-        <a href="{% url 'userman:logout' %}">Logout</a>
+        <a id="proposals_link" onclick="menu.openProposalsMenu(event)">{% trans 'Proposals' %}</a>
+        <a id="reserve_link" onclick="menu.openReserveMenu(event)">{% trans 'Reserve' %}</a>
+        <a id="aboutus_link" onclick="menu.openAboutusMenu(event)">{% trans 'About us' %}</a>
+        <a id="help_link" onclick="menu.openHelpMenu(event)">{% trans 'Help' %}</a>
+        <a href="{% url 'userman:logout' %}">{% trans 'Logout' %}</a>
     </div>
     <div id="links">
         <a href="#"><img src="{% static 'icons/menu/youtube.png' %}" width="25px"/></a>
@@ -53,7 +57,16 @@
 </div>
 <div id="triangle-right"></div>
 <div class="sidenav" id="proposals_div" dir="rtl">
-    {#    d#}
+    <table id="proposals_table">
+        <tr>
+            <th>{% trans 'Title' %}</th>
+            <th>{% trans 'Start' %}</th>
+            <th> {% trans 'Last change' %}</th>
+            <th>{% trans 'Actions' %}</th>
+            <th>{% trans 'Status' %}</th>
+        </tr>
+
+    </table>
 </div>
 <div class="sidenav" id="reserve_div" dir="rtl">
     <script>
@@ -72,7 +85,7 @@
     <form ng-app="myApp">
         {% csrf_token %}
         <div id="select_place_div" class="form_part">
-            <h2>Place</h2>
+            <h2>{% trans 'Place' %}</h2>
 
             <div id="place_images">
                 <img name='container_gallery' src="{% static 'icons/menu/container_gallery.png' %}"
@@ -86,7 +99,7 @@
             <br style="clear: both"/>
         </div>
         <div id="select_location_div" class="form_part">
-            <h2>Location</h2>
+            <h2>{% trans 'Location' %}</h2>
 
             <div id="location_image">
                 <img src="{% static 'icons/menu/location.png' %}" onclick="showReserveUI()" id="location_img"/>
@@ -100,98 +113,93 @@
         </div>
 
         <div id="select_time_div" class="form_part">
-            <h2>Time</h2>
 
             <div class="time_div">
-                <h2>start</h2>
+                <h2>{% trans 'Start date' %}</h2>
                 <adm-dtp ng-model="date1" options='date_options'
                          full-data="date1_detail" class="time-picker"
                          maxdate="{% verbatim %} {{ date2_detail.unix }} {% endverbatim %}"></adm-dtp>
             </div>
             <div class="time_div">
-                <h2>end</h2>
+                <h2>{% trans 'End date' %}</h2>
                 <adm-dtp ng-model="date2" options='date_options'
                          full-data="date2_detail" class="time-picker"
                          mindate="{% verbatim %} {{ date1_detail.unix }} {% endverbatim %}"></adm-dtp>
             </div>
+            <br style="clear: both"/>
+
             <div id="time_schedule_div">
+                <div class="day_item">
+                    <label class="checkbox-inline"><input type="checkbox" class="checkbox all" value=""
+                            >{% trans 'All' %}</label>
+                    <input type="text" class="time_picker from all" disabled="disabled"/>
 
-                <div class="dropdown">
-                    <button class="dropdown-toggle">&#9660;</button>
-                    <div class="dropdown-menu">
-                        <div class="day_item">
-                            <label class="checkbox-inline"><input type="checkbox" class="checkbox all" value=""
-                                                                  checked="checked">All</label>
-                            <input type="text" class="time_picker from all"/>
+                    <p class="dash"></p>
+                    <input type="text" class="time_picker to all" disabled="disabled"/>
+                    <br style="clear: both"/>
+                </div>
+                <div class="day_item">
+                    <label class="checkbox-inline"><input type="checkbox" class="checkbox sat" value=""
+                            >{% trans 'Saturday' %}</label>
+                    <input type="text" class="time_picker from sat" disabled="disabled"/>
 
-                            <p class="dash">-</p>
-                            <input type="text" class="time_picker to all"/>
-                            <br style="clear: both"/>
-                        </div>
-                        <div class="day_item">
-                            <label class="checkbox-inline"><input type="checkbox" class="checkbox sat" value=""
-                                                                  checked="checked">Saturday</label>
-                            <input type="text" class="time_picker from sat"/>
+                    <p class="dash"></p>
+                    <input type="text" class="time_picker to sat" disabled="disabled"/>
+                    <br style="clear: both"/>
+                </div>
+                <div class="day_item">
+                    <label class="checkbox-inline"><input type="checkbox" class="checkbox sun" value=""
+                            >{% trans 'Sunday' %}</label>
+                    <input type="text" class="time_picker from sun" disabled="disabled"/>
 
-                            <p class="dash">-</p>
-                            <input type="text" class="time_picker to sat"/>
-                            <br style="clear: both"/>
-                        </div>
-                        <div class="day_item">
-                            <label class="checkbox-inline"><input type="checkbox" class="checkbox sun" value=""
-                                                                  checked="checked">Sunday</label>
-                            <input type="text" class="time_picker from sun"/>
+                    <p class="dash"></p>
+                    <input type="text" class="time_picker to sun" disabled="disabled"/>
+                    <br style="clear: both"/>
+                </div>
+                <div class="day_item">
+                    <label class="checkbox-inline"><input type="checkbox" class="checkbox mon" value=""
+                            >{% trans 'Monday' %}</label>
+                    <input type="text" class="time_picker from mon" disabled="disabled"/>
 
-                            <p class="dash">-</p>
-                            <input type="text" class="time_picker to sun"/>
-                            <br style="clear: both"/>
-                        </div>
-                        <div class="day_item">
-                            <label class="checkbox-inline"><input type="checkbox" class="checkbox mon" value=""
-                                                                  checked="checked">Monday</label>
-                            <input type="text" class="time_picker from mon"/>
+                    <p class="dash"></p>
+                    <input type="text" class="time_picker to mon" disabled="disabled"/>
+                    <br style="clear: both"/>
+                </div>
+                <div class="day_item">
+                    <label class="checkbox-inline"><input type="checkbox" class="checkbox tue"
+                                                          value="">{% trans 'Tuesday' %}</label>
+                    <input type="text" class="time_picker from tue" disabled="disabled"/>
 
-                            <p class="dash">-</p>
-                            <input type="text" class="time_picker to mon"/>
-                            <br style="clear: both"/>
-                        </div>
-                        <div class="day_item">
-                            <label class="checkbox-inline"><input type="checkbox" class="checkbox tue" value=""
-                                                                  checked="checked">Tuesday</label>
-                            <input type="text" class="time_picker from tue"/>
+                    <p class="dash"></p>
+                    <input type="text" class="time_picker to tue" disabled="disabled"/>
+                    <br style="clear: both"/>
+                </div>
+                <div class="day_item">
+                    <label class="checkbox-inline"><input type="checkbox" class="checkbox wed"
+                                                          value="">{% trans 'Wednesday' %}</label>
+                    <input type="text" class="time_picker from wed" disabled="disabled"/>
 
-                            <p class="dash">-</p>
-                            <input type="text" class="time_picker to tue"/>
-                            <br style="clear: both"/>
-                        </div>
-                        <div class="day_item">
-                            <label class="checkbox-inline"><input type="checkbox" class="checkbox wed" value=""
-                                                                  checked="checked">Wednesday</label>
-                            <input type="text" class="time_picker from wed"/>
+                    <p class="dash"></p>
+                    <input type="text" class="time_picker to wed" disabled="disabled"/>
+                    <br style="clear: both"/>
+                </div>
+                <div class="day_item">
+                    <label class="checkbox-inline"><input type="checkbox" class="checkbox thu"
+                                                          value="">{% trans 'Thursday' %}</label>
+                    <input type="text" class="time_picker from thu" disabled="disabled"/>
 
-                            <p class="dash">-</p>
-                            <input type="text" class="time_picker to wed"/>
-                            <br style="clear: both"/>
-                        </div>
-                        <div class="day_item">
-                            <label class="checkbox-inline"><input type="checkbox" class="checkbox thu" value=""
-                                                                  checked="checked">Thursday</label>
-                            <input type="text" class="time_picker from thu"/>
+                    <p class="dash"></p>
+                    <input type="text" class="time_picker to thu" disabled="disabled"/>
+                    <br style="clear: both"/>
+                </div>
+                <div class="day_item">
+                    <label class="checkbox-inline"><input type="checkbox" class="checkbox fri" value=""
+                            >{% trans 'Friday' %}</label>
+                    <input type="text" class="time_picker from fri" disabled="disabled"/>
 
-                            <p class="dash">-</p>
-                            <input type="text" class="time_picker to thu"/>
-                            <br style="clear: both"/>
-                        </div>
-                        <div class="day_item">
-                            <label class="checkbox-inline"><input type="checkbox" class="checkbox fri" value=""
-                                                                  checked="checked">Friday</label>
-                            <input type="text" class="time_picker from fri"/>
-
-                            <p class="dash">-</p>
-                            <input type="text" class="time_picker to fri"/>
-                            <br style="clear: both"/>
-                        </div>
-                    </div>
+                    <p class="dash"></p>
+                    <input type="text" class="time_picker to fri" disabled="disabled"/>
+                    <br style="clear: both"/>
                 </div>
             </div>
             <script>
@@ -250,25 +258,29 @@
             <br style="clear: both"/>
         </div>
         <div id="title_div" class="form_part">
-            <h2>Title</h2>
+            <h2>{% trans 'Title' %}</h2>
             <input type='text' id="title_text"/>
             <br style="clear: both;"/>
         </div>
         <div id="description_div" class="form_part">
-            <h2>Description</h2>
+            <h2>{% trans 'Description' %}</h2>
             <textarea id="description_text"></textarea>
         </div>
         <div id="select_facilities" class="form_part">
-            <h2>Facilities</h2>
+            <h2>{% trans 'Extra facilities' %}</h2>
 
             <div id="facilities_div">
             </div>
-            <input type="submit" value="Submit" onclick="submitProposal()">
+            <input type="submit" id="save_button" value="{% trans 'Save' %}" onclick="saveProposal()">
         </div>
     </form>
 </div>
-<div class="sidenav" id="aboutus_div" dir="rtl">
-    <h1 style="width: 100% margin: 0; text-align: center ; padding: 400px 0"><b>TUIC</b></h1>
+<div class="sidenav" id="aboutus_div" dir="{% trans 'ltr' %}">
+    <h1 class="w3-center"><b>{% trans 'TUIC' %}</b></h1>
+
+    <div class="w3-content w3-display-container" id="aboutus_slideshow" dir="ltr"></div>
+    <div id="aboutus_text"></div>
+
 </div>
 <div class="sidenav" id="help_div" dir="rtl">
 
@@ -277,7 +289,7 @@
     <div id="event_closebtndiv">
         <a href="javascript:void(0)" id="event_closebtn" onclick="closeEventDiv(event)"><b>&times;</b></a>
     </div>
-    <h2 id="event_title"></h2>
+    <h1 id="event_title"></h1>
 
     <div id="amazingslider-wrapper-1" style="display:block;position:relative;max-width:600px;margin:0 auto 48px;">
         {#            <ul class="amazingslider-slides" id="slider_contents" style="display:none;">#}
@@ -298,15 +310,19 @@
 
     <h2 id="event_schedule"></h2>
 
-    <hr>
+    <hr style="width: 500px; margin: 0 auto">
 
     <h5 id="event_description"></h5>
-
+    <img src="{% static 'icons/menu/arrow_top.svg' %}" id="event_arrow_top" onclick="openOtherEvents()"/>
 </div>
+<div id="other_events_div">
+    <img src="{% static 'icons/menu/arrow_bot.svg' %}" id="event_arrow_bot" onclick="closeOtherEvents()"/>
+
+    <div id="other_events_cards"></div>
 </div>
 
 <div id="map"></div>
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUdhNRJM-BAnT4hSvg-JHuK5vaKUzQ75Q&callback=initMap&language=fa&v=3"></script>
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUdhNRJM-BAnT4hSvg-JHuK5vaKUzQ75Q&callback=initMap&language={% trans 'en' %}&v=3"></script>
 </body>
 </html>

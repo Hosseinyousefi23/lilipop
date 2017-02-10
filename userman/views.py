@@ -1,5 +1,4 @@
 from django.contrib.auth import logout, authenticate, login
-
 from django.http.response import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls.base import reverse
@@ -44,4 +43,4 @@ def log_in(request):
 def log_out(request):
     if request.user.is_authenticated():
         logout(request)
-    return render(request, 'main_page.html', {})
+    return HttpResponseRedirect(reverse('main:main_page'))

@@ -9,7 +9,8 @@ from django.utils import timezone
 from django.utils.translation import activate, LANGUAGE_SESSION_KEY
 from geoposition import Geoposition
 
-from event.models import PlaceType, Event, Place, Facility, File, PlaceLocation, Proposal, ProposalLocation
+from static.python import jalali
+from event.models import PlaceType, Event, Place, Facility, File, PlaceLocation, Proposal, ProposalLocation, AboutUs
 
 
 @login_required
@@ -19,7 +20,16 @@ def reserve(request):
     description = request.POST['description']
     title = request.POST['title']
     owner = request.user
-    proposal = Proposal(place_type=place_type, description=description, title=title, owner=owner)
+    start_date = jalali.Persian(request.POST['start_date']).gregorian_datetime()
+    end_date = jalali.Persian(request.POST['end_date']).gregorian_datetime()
+    jalali_start_date_txt = request.POST['jalali_start_date_txt']
+    jalali_end_date_txt = request.POST['jalali_end_date_txt']
+    schedule = request.POST['schedule']
+    proposal = Proposal(place_type=place_type, start_date=start_date, end_date=end_date,
+                        jalali_start_date_txt=jalali_start_date_txt, jalali_end_date_txt=jalali_end_date_txt,
+                        schedule_txt=schedule,
+                        description=description,
+                        title=title, owner=owner, status='not submitted', status_fa='ثبت نشده')
     proposal.save()
 
     locations_str = request.POST['locations']
@@ -34,9 +44,14 @@ def reserve(request):
 
     facilities_str = request.POST['facilities']
     facilities_array = facilities_str.split(',')
-    for fac in facilities_array:
-        facility_item = Facility.objects.get(name=fac)
-        proposal.extra_facilities.add(facility_item)
+    if request.session[LANGUAGE_SESSION_KEY] == 'en':
+        for fac in facilities_array:
+            facility_item = Facility.objects.get(english_name=fac)
+            proposal.extra_facilities.add(facility_item)
+    elif request.session[LANGUAGE_SESSION_KEY] == 'fa':
+        for fac in facilities_array:
+            facility_item = Facility.objects.get(persian_name=fac)
+            proposal.extra_facilities.add(facility_item)
     return HttpResponse('ok')
 
 
@@ -92,7 +107,8 @@ def send_data(request):
         place_id = int(request.GET['place'])
         place = Place.objects.get(pk=place_id)
         events = Event.objects.filter(place=place, startDateTime__lte=selected_time, endDateTime__gte=selected_time)
-        return JsonResponse({'events': serializers.serialize('json', events), 'place_id': place_id})
+        return JsonResponse({'events': serializers.serialize('json', events), 'place_id': place_id,
+                             'lang': request.session[LANGUAGE_SESSION_KEY]})
 
     elif request.GET['request'] == 'events':
         place_id = int(request.GET['place'])
@@ -103,7 +119,8 @@ def send_data(request):
         })
     elif request.GET['request'] == 'facility':
         return JsonResponse({
-            'facilities': serializers.serialize('json', Facility.objects.all())
+            'facilities': serializers.serialize('json', Facility.objects.all()),
+            'lang': request.LANGUAGE_CODE
         })
     elif request.GET['request'] == 'files':
         event_id = int(request.GET['event'])
@@ -117,6 +134,22 @@ def send_data(request):
         return JsonResponse({'zone': serializers.serialize('json', PlaceLocation.objects.filter(place=place))})
     elif request.GET['request'] == 'lang':
         return HttpResponse(request.LANGUAGE_CODE)
+    elif request.GET['request'] == 'aboutus':
+        return JsonResponse({'aboutus': serializers.serialize('json', AboutUs.objects.all()),
+                             'lang': request.LANGUAGE_CODE})
+    elif request.GET['request'] == 'proposals':
+        proposals = Proposal.objects.filter(owner=request.user)
+        return JsonResponse({'proposals': serializers.serialize('json', proposals), 'lang': request.LANGUAGE_CODE})
+    elif request.GET['request'] == 'proposal_locations':
+        proposal_id = int(request.GET['proposal'])
+        proposal = Proposal.objects.get(pk=proposal_id)
+        locations = ProposalLocation.objects.filter(proposal=proposal)
+        return JsonResponse({'locations': serializers.serialize('json', locations)})
+    elif request.GET['request'] == 'proposal_facilities':
+        proposal_id = int(request.GET['proposal'])
+        proposal = Proposal.objects.get(pk=proposal_id)
+        facilities = Facility.objects.filter(proposal=proposal)
+        return JsonResponse({'facilities': serializers.serialize('json', facilities), 'lang': request.LANGUAGE_CODE})
 
 
 def change_lang(request):
@@ -124,3 +157,18 @@ def change_lang(request):
     activate(lang)
     request.session[LANGUAGE_SESSION_KEY] = lang
     return HttpResponseRedirect(reverse('main:main_page'))
+
+
+def delete_proposal(request):
+    proposal_id = int(request.GET['proposal'])
+    Proposal.objects.get(pk=proposal_id).delete()
+    return HttpResponse('ok')
+
+
+def submit_proposal(request):
+    proposal_id = int(request.GET['proposal'])
+    proposal = Proposal.objects.get(pk=proposal_id)
+    proposal.status = 'pending approval'
+    proposal.status_fa = 'در انتظار تایید'
+    proposal.save()
+    return HttpResponse('ok')

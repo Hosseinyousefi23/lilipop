@@ -1,6 +1,112 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
 @font-face {
     font-family: roya;
     src: url(B%20Roya_0.ttf)
+}
+
+.login-page {
+    width: 360px;
+    padding: 8% 0 0;
+    margin: auto;
+}
+
+.form {
+    position: relative;
+    z-index: 1;
+    background: #FFFFFF;
+    max-width: 360px;
+    margin: 0 auto 100px;
+    padding: 45px;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+.form input {
+    font-family: "Roboto", sans-serif;
+    outline: 0;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    margin: 0 0 15px;
+    display: block;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.form button {
+    font-family: "Roboto", sans-serif;
+    text-transform: uppercase;
+    outline: 0;
+    background: #4CAF50;
+    width: 100%;
+    border: 0;
+    padding: 15px;
+    color: #FFFFFF;
+    font-size: 14px;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.form button:hover, .form button:active, .form button:focus {
+    background: #43A047;
+}
+
+.form .message {
+    margin: 15px 0 0;
+    color: #b3b3b3;
+    font-size: 12px;
+}
+
+.form .message a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.form .register-form {
+    display: none;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.container:before, .container:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.container .info {
+    margin: 50px auto;
+    text-align: center;
+}
+
+.container .info h1 {
+    margin: 0 0 15px;
+    padding: 0;
+    font-size: 36px;
+    font-weight: 300;
+    color: #1a1a1a;
+}
+
+.container .info span {
+    color: #4d4d4d;
+    font-size: 12px;
+}
+
+.container .info span a {
+    color: #000000;
+    text-decoration: none;
+}
+
+.container .info span .fa {
+    color: #EF3B3A;
 }
 
 html, body {
@@ -25,6 +131,35 @@ html, body {
     z-index: -1;
     background-color: transparent;
     transition: 0.5s;
+}
+
+#welcome_div {
+    float: left;
+    margin-left: 40px;
+}
+
+#welcome_div img {
+    transition: 1.5s;
+    float: left;
+    width: 600px;
+    height: 50px;
+
+}
+
+#gif_triangle {
+    z-index: 3;
+    float: left;
+    top: 0;
+    width: 0;
+    height: 0;
+    margin-left: -15px;
+    border-bottom: 26px solid transparent;
+    border-top: 26px solid transparent;
+    border-right: 15px solid #000000;
+    /*background-color: red;*/
+    /*display: none;*/
+    transition: 1s;
+
 }
 
 .sidenav {
@@ -105,12 +240,17 @@ html, body {
 #reserve_div {
     right: -600px;
     width: 600px;
-    padding-top: 100px;
+    padding-top: 20px;
+}
+
+#reserve_div h2 {
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
 
 #proposals_div {
-    right: -600px;
-    width: 600px;
+    right: -800px;
+    width: 800px;
 }
 
 #help_div {
@@ -120,6 +260,7 @@ html, body {
 
 .form_part {
     margin-right: 55px;
+    margin-top: 13px;
 }
 
 #select_place_div {
@@ -211,16 +352,13 @@ html, body {
 }
 
 .time_div {
-    width: 40%;
+    width: 47%;
     float: right;
     margin: 0 1%;
 }
 
 #time_schedule_div {
-    float: right;
-    width: 6%;
-    margin: 0 1%;
-    padding-top: 66px;
+    margin-top: 20px;
 }
 
 .time-picker {
@@ -247,16 +385,16 @@ html, body {
 }
 
 .day_item {
-    margin: 10px 0;
+    margin: 8px 0;
     font-size: 18px;
 
 }
 
 .day_item input[type=text] {
     float: right;
-    margin: 0 20px;
+    /*margin: 0 20px;*/
     background-color: transparent;
-    border: none;
+    /*border: none;*/
     border-radius: 4px;
     font-size: 18px;
     width: 93px;
@@ -272,6 +410,7 @@ html, body {
 .checkbox-inline input[type=checkbox] {
     width: 15px;
     height: 15px;
+    margin-left: 5px;
 }
 
 .time_picker {
@@ -281,7 +420,7 @@ html, body {
 
 .dash {
     float: right;
-    margin: 0;
+    margin: 0 15%;
     height: 20px;
 
 }
@@ -292,7 +431,7 @@ html, body {
 }
 
 #title_div {
-    margin-top: 20px;
+    /*margin-top: 20px;*/
 }
 
 #title_div h2 {
@@ -303,9 +442,8 @@ html, body {
 #title_text {
     position: absolute;
     float: right;
-    margin-top: 20px;
     font-size: 20px;
-    width: 69%;
+    width: 74%;
 }
 
 #lang_div {
@@ -322,7 +460,7 @@ html, body {
 }
 
 #description_text {
-    width: 89%;
+    width: 94%;
     height: 200px;
 }
 
@@ -333,8 +471,8 @@ html, body {
 }
 
 #aboutus_div {
-    right: -400px;
-    width: 400px;
+    right: -600px;
+    width: 600px;
 }
 
 .delete-menu {
@@ -390,6 +528,21 @@ html, body {
     width: 700px;
 }
 
+#other_events_div {
+    height: 100%; /* 100% Full-height */
+    /*width: 0;  0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 3; /* Stay on top */
+    top: 100%;
+    right: 0;
+    background-color: #ffffff; /* rgb: 242 242 242 */
+    overflow-x: hidden; /*Disable horizontal scroll */
+    padding-top: 300px; /* Place content 60px from the top */
+    transition: 1s; /* 0.5 second transition effect to slide in the sidenav */
+    white-space: nowrap;
+    width: 700px;
+}
+
 #event_closebtn {
     font-size: 4em;
     text-decoration: none;
@@ -421,5 +574,135 @@ html, body {
 }
 
 .error {
-    border: 1px solid red;
+    color: red;
 }
+
+#aboutus_text {
+    white-space: normal;
+    margin: 20px auto;
+    width: 500px;
+}
+
+.my_slide_text {
+    font-size: 20px;
+}
+
+#aboutus_slideshow {
+    width: 500px;
+    height: 400px;
+}
+
+.my_slide {
+    width: 500px;
+    height: 400px;
+}
+
+#event_arrow_top {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 335px;
+    bottom: 20px;
+}
+
+#event_arrow_bot {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 335px;
+    top: 20px;
+}
+
+#proposals_table {
+    border-collapse: collapse;
+    width: 90%;
+    margin: auto;
+}
+
+#proposals_table th, #proposals_table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#proposals_table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#proposals_table tr:hover {
+    background-color: #ddd;
+}
+
+#proposals_table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.card {
+    width: 90%;
+    margin: -200px auto;
+    border: 1px solid #000000;
+    border-radius: 5%;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 -9px 15px -7px;
+}
+
+.card_image {
+    width: 100%;
+
+}
+
+.card_title {
+    text-align: center;
+    background-color: #31b0d5;
+    margin: 0;
+    position: relative;
+
+}
+
+.card:hover {
+    z-index: 200;
+}
+
+input[type=submit] {
+    margin-right: 420px;
+    background-color: white;
+    color: black;
+    border: 2px solid #008CBA;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+#login_div {
+    right: -300px;
+    width: 300px;
+    height: 13%;
+    top: 52px;
+}
+
+/*#username {*/
+/*display: block;*/
+/*margin: 10px 0;*/
+/*width: 100%;*/
+/*}*/
+
+/*#password {*/
+/*display: block;*/
+/*margin: 10px 0;*/
+/*width: 100%;*/
+/*}*/
+
+/*#login_form {*/
+/*width: 70%;*/
+/*margin: auto;*/
+
+/*}*/
+
