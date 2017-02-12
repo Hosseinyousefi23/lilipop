@@ -328,7 +328,7 @@ function Menu() {
     menu.open = function () {
         menu.showOpacity();
         document.getElementById("menu").style.right = "0";
-        document.getElementById('login_div').style.right = '-100px';
+        document.getElementById('login_div').style.right = '-250px';
         document.getElementById("aboutus_div").style.right = "-402px";
         document.getElementById("help_div").style.right = "-402px";
         setTimeout(function () {
@@ -343,14 +343,14 @@ function Menu() {
             document.getElementById('triangle-right').style.display = 'none';
             setTimeout(function () {
                 document.getElementById("menu").style.right = "-198px";
-                document.getElementById('login_div').style.right = '-300px';
+                document.getElementById('login_div').style.right = '-450px';
                 document.getElementById("aboutus_div").style.right = "-600px";
                 document.getElementById("help_div").style.right = "-600px";
                 menu.hideOpacity();
             }, 500);
         } else {
             document.getElementById("menu").style.right = "-198px";
-            document.getElementById('login_div').style.right = '-300px';
+            document.getElementById('login_div').style.right = '-450px';
             document.getElementById("aboutus_div").style.right = "-600px";
             document.getElementById("help_div").style.right = "-600px";
             menu.hideOpacity();
@@ -387,7 +387,10 @@ function Menu() {
     menu.closeLoginMenu = function (event) {
         menu.selectedMenuItem = null;
         menu.selectedMenuDiv = null;
-        document.getElementById('login_div').style.right = "-100px";
+        hideError(document.getElementById('login_username'));
+        hideError(document.getElementById('login_password'));
+        hideInvalidUsernameOrPassword();
+        document.getElementById('login_div').style.right = "-250px";
     };
     menu.closeAboutusMenu = function () {
         menu.selectedMenuItem = null;
@@ -982,3 +985,86 @@ function clearOtherEventsDiv() {
     document.getElementById('other_events_cards').innerHTML = '';
 }
 
+function loginButton(event) {
+    event.preventDefault();
+    var username = document.getElementById('login_username').value;
+    var password = document.getElementById('login_password').value;
+    var csrftoken = document.getElementsByName('csrfmiddlewaretoken')[1].value;
+    var hasError = false;
+    if (username == '') {
+        showError(document.getElementById('login_username'), 'Username cannot be empty');
+        hasError = true;
+    } else {
+        hideError(document.getElementById('login_username'));
+    }
+    if (password == '') {
+        showError(document.getElementById('login_password'), 'Password cannot be empty');
+        hasError = true;
+    } else {
+        hideError(document.getElementById('login_password'));
+    }
+    if (!hasError) {
+        var postData = {
+            username: username,
+            password: password,
+            csrfmiddlewaretoken: csrftoken
+        };
+        $.ajax({
+            type: "POST", url: '/user/check', data: postData, success: function (result) {
+                if (result == 'ok') {
+                    document.getElementsByClassName('login-form')[0].submit();
+                } else {
+                    showInvalidUsernameOrPassword();
+                }
+            }
+        });
+    }
+}
+
+function showError(element, errorMessage) {
+    var len = element.className.length;
+    if (len < 6 || element.className.substring(len - 6, len) != ' error') {
+        element.className += " error";
+    }
+    if (errorMessage) {
+        var message1 = element.previousSibling;
+        if (message1.className != 'error_message') {
+            var message = document.createElement('div');
+            message.setAttribute('class', 'error_message');
+            message.setAttribute('align', 'left');
+            message.innerHTML = errorMessage;
+            element.parentNode.insertBefore(message, element);
+        }
+    }
+}
+
+function hideError(element) {
+    var len = element.className.length;
+    if (element.className.substring(len - 6, len) == " error") {
+        element.className = element.className.substring(0, len - 6)
+    }
+    var message = element.previousSibling;
+    if (message && message.className == 'error_message') {
+        element.parentNode.removeChild(message);
+    }
+}
+
+function showInvalidUsernameOrPassword() {
+    var form = document.getElementsByClassName('login-form')[0];
+    var errorMessage = document.createElement('div');
+    errorMessage.innerHTML = 'Username or password is invalid';
+    showError(form.parentNode);
+    errorMessage.setAttribute('class', 'invalidUserPassMessage');
+    errorMessage.style.color = 'red';
+    errorMessage.setAttribute('align', 'left');
+    errorMessage.style.marginBottom = '10px';
+    form.insertBefore(errorMessage, form.children[0]);
+}
+
+function hideInvalidUsernameOrPassword() {
+    var form = document.getElementsByClassName('login-form')[0];
+    hideError(form.parentNode);
+    if (form.children[0].className == 'invalidUserPassMessage') {
+        form.removeChild(form.children[0]);
+    }
+}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-03 14:18+0330\n"
+"POT-Creation-Date: 2017-02-11 06:51+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,9 +25,75 @@ msgstr "English"
 msgid "Persian"
 msgstr "فارسی"
 
-#: .\templates\user_main_page.html:7
+#: .\templates\main_page.html:7 .\templates\user_main_page.html:7
 msgid "Main Page"
 msgstr "صفحه اصلی"
+
+#: .\templates\main_page.html:44 .\templates\main_page.html:73
+msgid "Login"
+msgstr "ورود"
+
+#: .\templates\main_page.html:45 .\templates\user_main_page.html:46
+msgid "About us"
+msgstr "درباره ما"
+
+#: .\templates\main_page.html:46 .\templates\user_main_page.html:47
+msgid "Help"
+msgstr "راهنمایی"
+
+#: .\templates\main_page.html:62
+msgid "Firstname"
+msgstr "نام"
+
+#: .\templates\main_page.html:63
+#, fuzzy
+#| msgid "Lastname"
+msgid "Lastname"
+msgstr "نام خانوادگی"
+
+#: .\templates\main_page.html:64 .\templates\main_page.html:71
+msgid "Username"
+msgstr "نام کاربری"
+
+#: .\templates\main_page.html:65 .\templates\main_page.html:72
+msgid "Password"
+msgstr "رمز عبور"
+
+#: .\templates\main_page.html:66
+msgid "Email"
+msgstr "ایمیل"
+
+#: .\templates\main_page.html:67
+msgid "Create"
+msgstr "ثبت نام"
+
+#: .\templates\main_page.html:68
+msgid "Already registered?"
+msgstr "قبلا ثبت نام کردید؟"
+
+#: .\templates\main_page.html:68
+msgid "Sign In"
+msgstr "ورود"
+
+#: .\templates\main_page.html:74
+msgid "Not registered?"
+msgstr "ثبت نام نکردید؟"
+
+#: .\templates\main_page.html:74
+msgid "Create an account"
+msgstr "ثبت نام"
+
+#: .\templates\main_page.html:84 .\templates\user_main_page.html:278
+msgid "ltr"
+msgstr "rtl"
+
+#: .\templates\main_page.html:85 .\templates\user_main_page.html:279
+msgid "TUIC"
+msgstr "مرکز نوآوری شهری"
+
+#: .\templates\main_page.html:119 .\templates\user_main_page.html:326
+msgid "en"
+msgstr "fa"
 
 #: .\templates\user_main_page.html:44
 msgid "Proposals"
@@ -37,19 +103,11 @@ msgstr "درخواست ها"
 msgid "Reserve"
 msgstr "رزرو"
 
-#: .\templates\user_main_page.html:46
-msgid "About us"
-msgstr "درباره ما"
-
-#: .\templates\user_main_page.html:47
-msgid "Help"
-msgstr "راهنمایی"
-
 #: .\templates\user_main_page.html:48
 msgid "Logout"
 msgstr "خروج"
 
-#: .\templates\user_main_page.html:62 .\templates\user_main_page.html:265
+#: .\templates\user_main_page.html:62 .\templates\user_main_page.html:261
 msgid "Title"
 msgstr "عنوان"
 
@@ -85,58 +143,46 @@ msgstr "تاریخ شروع"
 msgid "End date"
 msgstr "تاریخ اتمام"
 
-#: .\templates\user_main_page.html:136
+#: .\templates\user_main_page.html:134
 msgid "All"
 msgstr "همه"
 
-#: .\templates\user_main_page.html:145
+#: .\templates\user_main_page.html:143
 msgid "Saturday"
 msgstr "شنبه"
 
-#: .\templates\user_main_page.html:154
+#: .\templates\user_main_page.html:152
 msgid "Sunday"
 msgstr "یکشنبه"
 
-#: .\templates\user_main_page.html:163
+#: .\templates\user_main_page.html:161
 msgid "Monday"
 msgstr "دوشنبه"
 
-#: .\templates\user_main_page.html:172
+#: .\templates\user_main_page.html:170
 msgid "Tuesday"
 msgstr "سه شنبه"
 
-#: .\templates\user_main_page.html:181
+#: .\templates\user_main_page.html:179
 msgid "Wednesday"
 msgstr "چهارشنبه"
 
-#: .\templates\user_main_page.html:190
+#: .\templates\user_main_page.html:188
 msgid "Thursday"
 msgstr "پنجشنبه"
 
-#: .\templates\user_main_page.html:199
+#: .\templates\user_main_page.html:197
 msgid "Friday"
 msgstr "جمعه"
 
-#: .\templates\user_main_page.html:270
+#: .\templates\user_main_page.html:266
 msgid "Description"
 msgstr "توضیحات"
 
-#: .\templates\user_main_page.html:274
+#: .\templates\user_main_page.html:270
 msgid "Extra facilities"
 msgstr "امکانات اضافی"
 
-#: .\templates\user_main_page.html:278
+#: .\templates\user_main_page.html:274
 msgid "Save"
 msgstr "ذخیره"
-
-#: .\templates\user_main_page.html:282
-msgid "ltr"
-msgstr "rtl"
-
-#: .\templates\user_main_page.html:283
-msgid "TUIC"
-msgstr "مرکز نوآوری شهری"
-
-#: .\templates\user_main_page.html:326
-msgid "en"
-msgstr "fa"

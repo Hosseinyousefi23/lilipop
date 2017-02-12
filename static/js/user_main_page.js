@@ -1255,7 +1255,7 @@ function saveProposal() {
     }
 
     if (!hasError) {
-        var csrttoken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+        var csrftoken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
         var place_type = document.getElementById('place_type_input').getAttribute('value');
         var locations_str = "";
         for (var i = 0; i < locations.length; i++) {
@@ -1303,7 +1303,7 @@ function saveProposal() {
             title: title,
             description: description,
             facilities: facilities,
-            csrfmiddlewaretoken: csrttoken
+            csrfmiddlewaretoken: csrfttoken
         };
         $.ajax({
             type: "POST", url: '/event/reserve', data: postData, success: function (result) {

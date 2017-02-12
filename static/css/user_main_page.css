@@ -11,18 +11,20 @@
     margin: auto;
 }
 
-.form {
-    position: relative;
-    z-index: 1;
-    background: #FFFFFF;
+#login_div {
+    right: -450px;
+    width: 360px;
+    height: 200px;
+    top: 52px;
     max-width: 360px;
     margin: 0 auto 100px;
     padding: 45px;
     text-align: center;
+    overflow: hidden;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
-.form input {
+#login_div input {
     font-family: "Roboto", sans-serif;
     outline: 0;
     background: #f2f2f2;
@@ -35,7 +37,7 @@
     font-size: 14px;
 }
 
-.form button {
+#login_div button {
     font-family: "Roboto", sans-serif;
     text-transform: uppercase;
     outline: 0;
@@ -50,22 +52,22 @@
     cursor: pointer;
 }
 
-.form button:hover, .form button:active, .form button:focus {
+#login_div button:hover, #login_div button:active, #login_div button:focus {
     background: #43A047;
 }
 
-.form .message {
+#login_div .message {
     margin: 15px 0 0;
     color: #b3b3b3;
     font-size: 12px;
 }
 
-.form .message a {
+#login_div .message a {
     color: #4CAF50;
     text-decoration: none;
 }
 
-.form .register-form {
+#login_div .register-form {
     display: none;
 }
 
@@ -260,7 +262,7 @@ html, body {
 
 .form_part {
     margin-right: 55px;
-    margin-top: 13px;
+    margin-top: 12px;
 }
 
 #select_place_div {
@@ -574,7 +576,7 @@ html, body {
 }
 
 .error {
-    color: red;
+    border: solid 2px red !important;
 }
 
 #aboutus_text {
@@ -681,28 +683,7 @@ input[type=submit] {
     border-radius: 20px;
 }
 
-#login_div {
-    right: -300px;
-    width: 300px;
-    height: 13%;
-    top: 52px;
+.error_message {
+    color: red;
+
 }
-
-/*#username {*/
-/*display: block;*/
-/*margin: 10px 0;*/
-/*width: 100%;*/
-/*}*/
-
-/*#password {*/
-/*display: block;*/
-/*margin: 10px 0;*/
-/*width: 100%;*/
-/*}*/
-
-/*#login_form {*/
-/*width: 70%;*/
-/*margin: auto;*/
-
-/*}*/
-

@@ -56,26 +56,37 @@
 <div id="triangle-right"></div>
 
 <div class="sidenav" id="login_div">
-    <div class="login-page">
-        <div class="form">
-            <form class="register-form" method="post" action="{% url 'userman:signup' %}">
-                <input type="text" name='' placeholder="Username"/>
-                <input type="password" placeholder="password"/>
-                <input type="text" placeholder="email address"/>
-                <button>create</button>
-                <p class="message">Already registered? <a href="#">Sign In</a></p>
-            </form>
-            <form class="login-form" method="post" action="{% url 'userman:login' %}">
-                <input type="text" placeholder="username"/>
-                <input type="password" placeholder="password"/>
-                <button>login</button>
-                <p class="message">Not registered? <a href="#">Create an account</a></p>
-            </form>
-        </div>
-    </div>
+    <form class="register-form" method="post" action="{% url 'userman:signup' %}">
+        {% csrf_token %}
+        <input type="text" name='first_name' placeholder="{% trans 'Firstname' %}"/>
+        <input type="text" name='last_name' placeholder="{% trans 'Lastname' %}"/>
+        <input type="text" name='username' placeholder="{% trans 'Username' %}"/>
+        <input type="password" name='password' placeholder="{% trans 'Password' %}"/>
+        <input type="text" name='email' placeholder="{% trans 'Email' %}"/>
+        <button>{% trans 'Create' %}</button>
+        <p class="message">{% trans 'Already registered?' %} <a href="#">{% trans 'Sign In' %}</a></p>
+    </form>
+    <form class="login-form" method="post" action="{% url 'userman:login' %}">
+        {% csrf_token %}
+        <input type="text" id='login_username' name="username" placeholder="{% trans 'Username' %}"/>
+        <input type="password" id='login_password' name='password' placeholder="{% trans 'Password' %}"/>
+        <button onclick="loginButton(event)">{% trans 'Login' %}</button>
+        <p class="message">{% trans 'Not registered?' %} <a href="#">{% trans 'Create an account' %}</a></p>
+    </form>
     <script>
+        var isLogin = true;
         $('.message a').click(function () {
             $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+            if (isLogin) {
+                document.getElementById('login_div').style.height = '381px';
+                isLogin = false;
+            } else {
+                document.getElementById('login_div').style.height = '200px';
+                isLogin = true;
+            }
+            hideError(document.getElementById('login_username'));
+            hideError(document.getElementById('login_password'));
+            hideInvalidUsernameOrPassword();
         });
     </script>
 </div>
