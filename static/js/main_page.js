@@ -665,7 +665,9 @@ function addMarkerListeners(marker) {
                     var contentString;
                     if (event_obj.length > 0) {
                         contentString = '<div>'
-                        + '<img src="/media/' + event_obj[0].fields.image + '" style="width: 220px; height: 220px; margin-left: 25px; display: block"/>'
+                        + '<img src="'
+                        + pathName
+                        + '/media/' + event_obj[0].fields.image + '" style="width: 220px; height: 220px; margin-left: 25px; display: block"/>'
                         + '<h1 style="width: 220px; text-align: center; margin-left: 23px; margin-top: 20px">' + event_obj[0].fields.title + '</h1>'
                         + '</div>'
                     } else {
@@ -743,11 +745,11 @@ function createEventDiv(event, index) {
     var li = document.createElement('li');
     var a = document.createElement('a');
     document.getElementById('slider_contents').appendChild(li);
-    a.setAttribute('href', '/media/' + event.fields.image);
+    a.setAttribute('href', pathName + '/media/' + event.fields.image);
     a.setAttribute('class', 'html5lightbox');
     li.appendChild(a);
     var img = document.createElement('img');
-    img.setAttribute('src', '/media/' + event.fields.image);
+    img.setAttribute('src', pathName + '/media/' + event.fields.image);
     a.appendChild(img);
     $.ajax({
         url: pathName + '/event/data?request=files&event=' + event.pk,
@@ -758,14 +760,14 @@ function createEventDiv(event, index) {
                 var li = document.createElement('li');
                 var a = document.createElement('a');
                 document.getElementById('slider_contents').appendChild(li);
-                a.setAttribute('href', '/media/' + files[i].fields.file_field);
+                a.setAttribute('href', pathName + '/media/' + files[i].fields.file_field);
                 a.setAttribute('class', 'html5lightbox');
                 li.appendChild(a);
                 var img = document.createElement('img');
                 if (files[i].fields.type == 'video') {
-                    img.setAttribute('data-src', '/media/' + files[i].fields.poster);
+                    img.setAttribute('data-src', pathName + '/media/' + files[i].fields.poster);
                 } else if (files[i].fields.type == 'image') {
-                    img.setAttribute('src', '/media/' + files[i].fields.file_field);
+                    img.setAttribute('src', pathName + '/media/' + files[i].fields.file_field);
                 }
                 a.appendChild(img);
             }
@@ -890,7 +892,7 @@ function populateAboutUsSlideShow() {
             var lang = result['lang'];
             for (var i = 0; i < aboutUs.length; i++) {
                 var img = document.createElement('img');
-                img.setAttribute('src', '/media/' + aboutUs[i].fields.picture);
+                img.setAttribute('src', pathName + '/media/' + aboutUs[i].fields.picture);
                 img.setAttribute('class', 'my_slide');
                 aboutUsSlideShow.appendChild(img);
                 var text = document.createElement('div');
@@ -962,7 +964,7 @@ function createOtherEventsDiv(events) {
         cardTitle.setAttribute('class', 'card_title');
         cardTitle.innerHTML = current.fields.title;
         var cardImage = document.createElement('img');
-        cardImage.setAttribute('src', '/media/' + current.fields.image);
+        cardImage.setAttribute('src', pathName + '/media/' + current.fields.image);
         cardImage.setAttribute('class', 'card_image');
         var cardIndex = document.createElement('div');
         cardIndex.innerHTML = i.toString();
