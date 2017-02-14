@@ -1,5 +1,9 @@
 var map;
 var app;
+var pathName = window.location.pathname;
+if (pathName == '/') {
+    pathName = '';
+}
 var infoWindows = {};
 var currentInfoWindow;
 var selectedTime = new Date().getTime();
@@ -650,7 +654,7 @@ function initMap() {
 }
 function draw(time) {
     $.ajax({
-        url: '/event/data?request=places',
+        url: pathName + '/event/data?request=places',
         success: function (result) {
             var places = JSON.parse(result['places']);
             //console.log(places);
@@ -660,7 +664,7 @@ function draw(time) {
                     morningSelectedTime.setHours(7);
                     morningSelectedTime.setMinutes(0);
                     morningSelectedTime.setSeconds(0);
-                    var url = '/event/data?request=location_set&from=' + morningSelectedTime.getTime() + '&to=' + selectedTime + '&place=' + places[ii].pk
+                    var url = pathName + '/event/data?request=location_set&from=' + morningSelectedTime.getTime() + '&to=' + selectedTime + '&place=' + places[ii].pk
                     $.ajax({
                         url: url,
                         success: function (result) {
@@ -669,7 +673,7 @@ function draw(time) {
                             drawPath(location_set);
                         }
                     });
-                    var url2 = '/event/data?request=zone&place=' + places[ii].pk;
+                    var url2 = pathName + '/event/data?request=zone&place=' + places[ii].pk;
                     $.ajax({
                         url: url2,
                         success: function (result) {
@@ -694,7 +698,7 @@ function draw(time) {
                         }
                     });
                 }
-                var url = '/event/data?request=location&place=' + places[ii].pk;
+                var url = pathName + '/event/data?request=location&place=' + places[ii].pk;
                 if (time) {
                     url += '&time=' + time;
                 }
@@ -780,7 +784,7 @@ function addMarkerListeners(marker) {
             infoWindows[place_id].open(map, this);
             currentInfoWindow = infoWindows[place_id];
         } else {
-            var url = '/event/data?request=current_events&time=' + selectedTime + '&place=' + place_id;
+            var url = pathName + '/event/data?request=current_events&time=' + selectedTime + '&place=' + place_id;
             $.ajax({
                 url: url,
                 success: function (result) {
@@ -788,7 +792,9 @@ function addMarkerListeners(marker) {
                     var contentString;
                     if (event_obj.length > 0) {
                         contentString = '<div>'
-                        + '<img src="/media/' + event_obj[0].fields.image + '" style="width: 220px; height: 220px; margin-left: 25px; display: block"/>'
+                        + '<img src="'
+                        + pathName
+                        + '/media/' + event_obj[0].fields.image + '" style="width: 220px; height: 220px; margin-left: 25px; display: block"/>'
                         + '<h1 style="width: 220px; text-align: center; margin-left: 23px; margin-top: 20px">' + event_obj[0].fields.title + '</h1>'
                         + '</div>'
                     } else {
@@ -820,7 +826,7 @@ function addMarkerListeners(marker) {
                 return;
             }
             $.ajax({
-                url: '/event/data?request=events&time=' + selectedTime + '&place=' + this.place_id,
+                url: pathName + '/event/data?request=events&time=' + selectedTime + '&place=' + this.place_id,
                 success: function (result) {
 
                     var events = JSON.parse(result['events']);
@@ -866,14 +872,14 @@ function createEventDiv(event, index) {
     var li = document.createElement('li');
     var a = document.createElement('a');
     document.getElementById('slider_contents').appendChild(li);
-    a.setAttribute('href', '/media/' + event.fields.image);
+    a.setAttribute('href', pathName+'/media/' + event.fields.image);
     a.setAttribute('class', 'html5lightbox');
     li.appendChild(a);
     var img = document.createElement('img');
-    img.setAttribute('src', '/media/' + event.fields.image);
+    img.setAttribute('src', pathName +'/media/' + event.fields.image);
     a.appendChild(img);
     $.ajax({
-        url: '/event/data?request=files&event=' + event.pk,
+        url: pathName + '/event/data?request=files&event=' + event.pk,
         success: function (result) {
             var files = JSON.parse(result['files']);
             console.log(files);
@@ -881,14 +887,14 @@ function createEventDiv(event, index) {
                 var li = document.createElement('li');
                 var a = document.createElement('a');
                 document.getElementById('slider_contents').appendChild(li);
-                a.setAttribute('href', '/media/' + files[i].fields.file_field);
+                a.setAttribute('href', pathName + '/media/' + files[i].fields.file_field);
                 a.setAttribute('class', 'html5lightbox');
                 li.appendChild(a);
                 var img = document.createElement('img');
                 if (files[i].fields.type == 'video') {
-                    img.setAttribute('data-src', '/media/' + files[i].fields.poster);
+                    img.setAttribute('data-src', pathName + '/media/' + files[i].fields.poster);
                 } else if (files[i].fields.type == 'image') {
-                    img.setAttribute('src', '/media/' + files[i].fields.file_field);
+                    img.setAttribute('src', pathName + '/media/' + files[i].fields.file_field);
                 }
                 a.appendChild(img);
             }
@@ -957,13 +963,13 @@ function addZoomListener() {
 
 function populateEmbeddedList() {
     $.ajax({
-        url: '/event/data?request=places&place_type=smart_furniture',
+        url: pathName + '/event/data?request=places&place_type=smart_furniture',
         success: function (result) {
             var places = JSON.parse(result['places']);
             console.log(places);
             for (var i = 0; i < places.length; i++) {
                 $.ajax({
-                    url: '/event/data?request=location&place=' + places[i].pk,
+                    url: pathName + '/event/data?request=location&place=' + places[i].pk,
                     success: function (result) {
                         var location = locationParse(result['location']);
                         var marker = new google.maps.Marker({
@@ -1306,7 +1312,7 @@ function saveProposal() {
             csrfmiddlewaretoken: csrfttoken
         };
         $.ajax({
-            type: "POST", url: '/event/reserve', data: postData, success: function (result) {
+            type: "POST", url: pathName + '/event/reserve', data: postData, success: function (result) {
                 console.log(result);
             }
         });
@@ -1348,7 +1354,7 @@ function hideAllInvalidForms() {
 }
 function getFacilities() {
     $.ajax({
-        url: '/event/data?request=facility',
+        url: pathName + '/event/data?request=facility',
         success: function (result) {
             var lang = result['lang'];
             var facilities = JSON.parse(result['facilities']);
@@ -1391,7 +1397,7 @@ function populateAboutUsSlideShow() {
             var lang = result['lang'];
             for (var i = 0; i < aboutUs.length; i++) {
                 var img = document.createElement('img');
-                img.setAttribute('src', '/media/' + aboutUs[i].fields.picture);
+                img.setAttribute('src', pathName + '/media/' + aboutUs[i].fields.picture);
                 img.setAttribute('class', 'my_slide');
                 aboutUsSlideShow.appendChild(img);
                 var text = document.createElement('div');
@@ -1426,7 +1432,7 @@ function clearProposals() {
 }
 function populateProposals() {
     $.ajax({
-        url: '/event/data?request=proposals',
+        url: pathName + '/event/data?request=proposals',
         success: function (result) {
             var proposals = JSON.parse(result['proposals']);
             for (var i = 0; i < proposals.length; i++) {
@@ -1551,7 +1557,7 @@ function createOtherEventsDiv(events) {
         cardTitle.setAttribute('class', 'card_title');
         cardTitle.innerHTML = current.fields.title;
         var cardImage = document.createElement('img');
-        cardImage.setAttribute('src', '/media/' + current.fields.image);
+        cardImage.setAttribute('src', pathName + '/media/' + current.fields.image);
         cardImage.setAttribute('class', 'card_image');
         var cardIndex = document.createElement('div');
         cardIndex.innerHTML = i.toString();
@@ -1588,7 +1594,7 @@ function viewProposal(proposal) {
     var img = document.getElementsByName(placeTypes[proposal.fields.place_type])[0];
     menu.selectPlace(img);
     $.ajax({
-        url: '/event/data?request=proposal_locations&proposal=' + proposal.pk, success: function (result) {
+        url: pathName + '/event/data?request=proposal_locations&proposal=' + proposal.pk, success: function (result) {
             var proposal_locations = JSON.parse(result['locations']);
             if (proposal.fields.place_type == '1') {
                 var lat = parseFloat(proposal_locations[0].fields.position.split(',')[0]);
@@ -1670,7 +1676,7 @@ function viewProposal(proposal) {
     document.getElementById('description_text').value = proposal.fields.description;
 
     $.ajax({
-        url: '/event/data?request=proposal_facilities&proposal=' + proposal.pk, success: function (result) {
+        url: pathName + '/event/data?request=proposal_facilities&proposal=' + proposal.pk, success: function (result) {
             var facilities = JSON.parse(result['facilities']);
             console.log(facilities);
             for (var i = 0; i < facilities.length; i++) {
@@ -1705,7 +1711,7 @@ function setCurrentProposalID(id) {
 
 function deleteProposal(pk) {
     $.ajax({
-        url: '/event/delete?proposal=' + pk, success: function (result) {
+        url: pathName + '/event/delete?proposal=' + pk, success: function (result) {
             menu.openProposalsMenu(null);
         }
     });
@@ -1713,7 +1719,7 @@ function deleteProposal(pk) {
 
 function submitProposal(pk) {
     $.ajax({
-        url: '/event/submit?proposal=' + pk, success: function (result) {
+        url: pathName + '/event/submit?proposal=' + pk, success: function (result) {
             menu.openProposalsMenu(null);
         }
     });

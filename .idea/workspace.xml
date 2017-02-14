@@ -34,21 +34,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="user_main_page.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="user_main_page.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/static/js/user_main_page.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="21229" max-vertical-offset="29325">
-              <caret line="1257" column="83" selection-start-line="1257" selection-start-column="8" selection-end-line="1257" selection-end-column="83" />
+            <state vertical-scroll-proportion="0.70305675" vertical-offset="14706" max-vertical-offset="29427">
+              <caret line="884" column="31" selection-start-line="884" selection-start-column="31" selection-end-line="884" selection-end-column="31" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main_page.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main_page.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/static/js/main_page.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.51746726" vertical-offset="17171" max-vertical-offset="18411">
-              <caret line="1024" column="17" selection-start-line="1024" selection-start-column="17" selection-end-line="1024" selection-end-column="17" />
+            <state vertical-scroll-proportion="-0.5862069" vertical-offset="0" max-vertical-offset="18394">
+              <caret line="1" column="8" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -197,7 +197,6 @@
         <option value="$PROJECT_DIR$/event/Forms.py" />
         <option value="$PROJECT_DIR$/conf/locale/fa/LC_MESSAGES/django.po" />
         <option value="$PROJECT_DIR$/userman/urls.py" />
-        <option value="$PROJECT_DIR$/static/js/user_main_page.js" />
         <option value="$PROJECT_DIR$/userman/views.py" />
         <option value="$PROJECT_DIR$/templates/main_page.html" />
         <option value="$PROJECT_DIR$/static/css/user_main_page.css" />
@@ -207,6 +206,7 @@
         <option value="$PROJECT_DIR$/main/views.py" />
         <option value="$PROJECT_DIR$/main/urls.py" />
         <option value="$PROJECT_DIR$/static/js/main_page.js" />
+        <option value="$PROJECT_DIR$/static/js/user_main_page.js" />
       </list>
     </option>
   </component>
@@ -673,7 +673,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/static/js/user_main_page.js</url>
-          <line>468</line>
+          <line>472</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
@@ -1005,18 +1005,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/js/user_main_page.js">
+    <entry file="file://$PROJECT_DIR$/static/js/main_page.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="21229" max-vertical-offset="29325">
-          <caret line="1257" column="83" selection-start-line="1257" selection-start-column="8" selection-end-line="1257" selection-end-column="83" />
+        <state vertical-scroll-proportion="-0.5862069" vertical-offset="0" max-vertical-offset="18394">
+          <caret line="1" column="8" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/js/main_page.js">
+    <entry file="file://$PROJECT_DIR$/static/js/user_main_page.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.51746726" vertical-offset="17171" max-vertical-offset="18411">
-          <caret line="1024" column="17" selection-start-line="1024" selection-start-column="17" selection-end-line="1024" selection-end-column="17" />
+        <state vertical-scroll-proportion="0.70305675" vertical-offset="14706" max-vertical-offset="29427">
+          <caret line="884" column="31" selection-start-line="884" selection-start-column="31" selection-end-line="884" selection-end-column="31" />
           <folding />
         </state>
       </provider>

@@ -1,6 +1,5 @@
 var map;
 var app;
-
 var pathName = window.location.pathname;
 if (pathName == '/') {
     pathName = '';
