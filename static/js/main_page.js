@@ -1017,7 +1017,7 @@ function loginButton(event) {
             csrfmiddlewaretoken: csrftoken
         };
         $.ajax({
-            type: "POST", url: '/user/check', data: postData, success: function (result) {
+            type: "POST", url: pathName + '/user/check', data: postData, success: function (result) {
                 if (result == 'ok') {
                     document.getElementsByClassName('login-form')[0].submit();
                 } else {
