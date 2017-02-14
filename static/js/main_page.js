@@ -523,7 +523,7 @@ function initMap() {
 }
 function draw(time) {
     $.ajax({
-        url: '/event/data?request=places',
+        url: 'event/data?request=places',
         success: function (result) {
             var places = JSON.parse(result['places']);
             //console.log(places);
@@ -533,7 +533,7 @@ function draw(time) {
                     morningSelectedTime.setHours(7);
                     morningSelectedTime.setMinutes(0);
                     morningSelectedTime.setSeconds(0);
-                    var url = '/event/data?request=location_set&from=' + morningSelectedTime.getTime() + '&to=' + selectedTime + '&place=' + places[ii].pk
+                    var url = 'event/data?request=location_set&from=' + morningSelectedTime.getTime() + '&to=' + selectedTime + '&place=' + places[ii].pk
                     $.ajax({
                         url: url,
                         success: function (result) {
@@ -542,7 +542,7 @@ function draw(time) {
                             drawPath(location_set);
                         }
                     });
-                    var url2 = '/event/data?request=zone&place=' + places[ii].pk;
+                    var url2 = 'event/data?request=zone&place=' + places[ii].pk;
                     $.ajax({
                         url: url2,
                         success: function (result) {
@@ -567,7 +567,7 @@ function draw(time) {
                         }
                     });
                 }
-                var url = '/event/data?request=location&place=' + places[ii].pk;
+                var url = 'event/data?request=location&place=' + places[ii].pk;
                 if (time) {
                     url += '&time=' + time;
                 }
@@ -653,7 +653,7 @@ function addMarkerListeners(marker) {
             infoWindows[place_id].open(map, this);
             currentInfoWindow = infoWindows[place_id];
         } else {
-            var url = '/event/data?request=current_events&time=' + selectedTime + '&place=' + place_id;
+            var url = 'event/data?request=current_events&time=' + selectedTime + '&place=' + place_id;
             $.ajax({
                 url: url,
                 success: function (result) {
@@ -693,7 +693,7 @@ function addMarkerListeners(marker) {
                 return;
             }
             $.ajax({
-                url: '/event/data?request=events&time=' + selectedTime + '&place=' + this.place_id,
+                url: 'event/data?request=events&time=' + selectedTime + '&place=' + this.place_id,
                 success: function (result) {
 
                     var events = JSON.parse(result['events']);
@@ -746,7 +746,7 @@ function createEventDiv(event, index) {
     img.setAttribute('src', '/media/' + event.fields.image);
     a.appendChild(img);
     $.ajax({
-        url: '/event/data?request=files&event=' + event.pk,
+        url: 'event/data?request=files&event=' + event.pk,
         success: function (result) {
             var files = JSON.parse(result['files']);
             console.log(files);
@@ -830,13 +830,13 @@ function addZoomListener() {
 
 function populateEmbeddedList() {
     $.ajax({
-        url: '/event/data?request=places&place_type=smart_furniture',
+        url: 'event/data?request=places&place_type=smart_furniture',
         success: function (result) {
             var places = JSON.parse(result['places']);
             console.log(places);
             for (var i = 0; i < places.length; i++) {
                 $.ajax({
-                    url: '/event/data?request=location&place=' + places[i].pk,
+                    url: 'event/data?request=location&place=' + places[i].pk,
                     success: function (result) {
                         var location = locationParse(result['location']);
                         var marker = new google.maps.Marker({
@@ -878,7 +878,7 @@ function addCloseInfoWindowMapListener() {
 
 function populateAboutUsSlideShow() {
     $.ajax({
-        url: '/event/data?request=aboutus',
+        url: 'event/data?request=aboutus',
         success: function (result) {
             var aboutUsSlideShow = document.getElementById('aboutus_slideshow');
             var aboutUsText = document.getElementById('aboutus_text');
