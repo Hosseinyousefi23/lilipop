@@ -1,5 +1,6 @@
-from _decimal import Decimal
-import datetime
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+from decimal import Decimal
 
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
@@ -9,7 +10,7 @@ from django.utils import timezone
 from django.utils.translation import activate, LANGUAGE_SESSION_KEY
 from geoposition import Geoposition
 
-from static.python import jalali
+from event.jalali import *
 from event.models import PlaceType, Event, Place, Facility, File, PlaceLocation, Proposal, ProposalLocation, AboutUs
 
 
@@ -20,8 +21,8 @@ def reserve(request):
     description = request.POST['description']
     title = request.POST['title']
     owner = request.user
-    start_date = jalali.Persian(request.POST['start_date']).gregorian_datetime()
-    end_date = jalali.Persian(request.POST['end_date']).gregorian_datetime()
+    start_date = Persian(request.POST['start_date']).gregorian_datetime()
+    end_date = Persian(request.POST['end_date']).gregorian_datetime()
     jalali_start_date_txt = request.POST['jalali_start_date_txt']
     jalali_end_date_txt = request.POST['jalali_end_date_txt']
     schedule = request.POST['schedule']
