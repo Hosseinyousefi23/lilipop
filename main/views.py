@@ -3,7 +3,7 @@ from django.utils.translation import activate, LANGUAGE_SESSION_KEY
 
 
 def main_page(request):
-    if not request.session[LANGUAGE_SESSION_KEY]:
+    if LANGUAGE_SESSION_KEY not in request.session:
         activate('en')
         request.session[LANGUAGE_SESSION_KEY] = 'en'
     if request.user.is_authenticated():
