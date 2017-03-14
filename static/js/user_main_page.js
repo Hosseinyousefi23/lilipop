@@ -11,6 +11,7 @@ var currentEventDivMarker = null;
 var markers = [];
 var paths = [];
 var zones = [];
+var zoneToggleListener;
 var showMarkers = true;
 var clearButton;
 var mapClickMenuListener;
@@ -37,6 +38,8 @@ var mapUI = {
 
     // should be renamed if place type names in server database renamed
     'disable': function () {
+        addZoneToggleListener();
+        zoneToggle();
         for (var i = 0; i < embeddedList.length; i++) {
             embeddedList[i].setMap(null);
         }
@@ -66,6 +69,8 @@ var mapUI = {
         showMarkers = true;
     },
     'container_gallery': function () {
+        removeZoneToggleListener();
+        clearZones();
         for (var i = 0; i < embeddedList.length; i++) {
             embeddedList[i].setMap(null);
         }
@@ -105,6 +110,8 @@ var mapUI = {
 
     },
     'mobile_media_unit': function () {
+        removeZoneToggleListener();
+        clearZones();
         for (var i = 0; i < embeddedList.length; i++) {
             embeddedList[i].setMap(null);
         }
@@ -178,6 +185,8 @@ var mapUI = {
 
     },
     'smart_furniture': function () {
+        removeZoneToggleListener();
+        clearZones();
         for (var i = 0; i < embeddedList.length; i++) {
             embeddedList[i].setOptions({map: map});
         }
@@ -830,6 +839,7 @@ function addMarkerListeners(marker) {
                 success: function (result) {
 
                     var events = JSON.parse(result['events']);
+                    console.log(events);
                     if (events.length == 0)
                         return;
                     var event = events[0];
@@ -872,11 +882,11 @@ function createEventDiv(event, index) {
     var li = document.createElement('li');
     var a = document.createElement('a');
     document.getElementById('slider_contents').appendChild(li);
-    a.setAttribute('href', pathName+'/media/' + event.fields.image);
+    a.setAttribute('href', pathName + '/media/' + event.fields.image);
     a.setAttribute('class', 'html5lightbox');
     li.appendChild(a);
     var img = document.createElement('img');
-    img.setAttribute('src', pathName +'/media/' + event.fields.image);
+    img.setAttribute('src', pathName + '/media/' + event.fields.image);
     a.appendChild(img);
     $.ajax({
         url: pathName + '/event/data?request=files&event=' + event.pk,
@@ -948,19 +958,41 @@ function addZoomListener() {
             }
 
         }
-        if (map.getZoom() > 13) {
-            for (var i = 0; i < zones.length; i++) {
-                zones[i].setMap(map);
-            }
-        } else {
-            for (var i = 0; i < zones.length; i++) {
-                zones[i].setMap(null);
-            }
-        }
 
     });
+    addZoneToggleListener();
 }
 
+function addZoneToggleListener() {
+    if (!zoneToggleListener) {
+        zoneToggleListener = map.addListener('zoom_changed', zoneToggle);
+    }
+}
+
+function removeZoneToggleListener() {
+    if (zoneToggleListener) {
+        google.maps.event.removeListener(zoneToggleListener);
+        zoneToggleListener = null;
+    }
+}
+function zoneToggle() {
+    if (map.getZoom() > 13) {
+        showZones();
+    } else {
+        clearZones();
+    }
+}
+function showZones() {
+    for (var i = 0; i < zones.length; i++) {
+        zones[i].setMap(map);
+    }
+}
+
+function clearZones() {
+    for (var i = 0; i < zones.length; i++) {
+        zones[i].setMap(null);
+    }
+}
 function populateEmbeddedList() {
     $.ajax({
         url: pathName + '/event/data?request=places&place_type=smart_furniture',

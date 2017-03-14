@@ -12,7 +12,6 @@ var markers = [];
 var paths = [];
 var zones = [];
 var showMarkers = true;
-var clearButton;
 var mapClickMenuListener;
 var embeddedList = [];
 var currentMarker = null;
@@ -332,7 +331,7 @@ function Menu() {
     menu.open = function () {
         menu.showOpacity();
         document.getElementById("menu").style.right = "0";
-        document.getElementById('login_div').style.right = '-250px';
+        document.getElementById('login_div').style.right = '-252px';
         document.getElementById("aboutus_div").style.right = "-402px";
         document.getElementById("help_div").style.right = "-402px";
         setTimeout(function () {
@@ -394,7 +393,7 @@ function Menu() {
         hideError(document.getElementById('login_username'));
         hideError(document.getElementById('login_password'));
         hideInvalidUsernameOrPassword();
-        document.getElementById('login_div').style.right = "-250px";
+        document.getElementById('login_div').style.right = "-252px";
     };
     menu.closeAboutusMenu = function () {
         menu.selectedMenuItem = null;
