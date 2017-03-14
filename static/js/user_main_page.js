@@ -1341,7 +1341,7 @@ function saveProposal() {
             title: title,
             description: description,
             facilities: facilities,
-            csrfmiddlewaretoken: csrfttoken
+            csrfmiddlewaretoken: csrftoken
         };
         $.ajax({
             type: "POST", url: pathName + '/event/reserve', data: postData, success: function (result) {
