@@ -10,7 +10,7 @@
 # Original License Notes:
 #
 # /** Software Hijri_Shamsi , Solar(Jalali) Date and Time
-#    Copyright(C)2011, Reza Gholampanahi , http://jdf.scr.ir
+# Copyright(C)2011, Reza Gholampanahi , http://jdf.scr.ir
 #    version 2.55 :: 1391/08/24 = 1433/12/18 = 2012/11/15 */
 #
 #    /** Convertor from and to Gregorian and Jalali (Hijri_Shamsi,Solar) Functions
@@ -140,7 +140,7 @@ class Persian:
             month = int(date[1])
             day = int(date[2])
         else:
-            raise Exception("Invalid Input")
+            raise Exception(date)
 
         # Check validity of date. TODO better check (leap years)
         if year < 1 or month < 1 or month > 12 or day < 1 or day > 31 or (month > 6 and day == 31):

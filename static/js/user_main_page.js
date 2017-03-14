@@ -1348,6 +1348,10 @@ function saveProposal() {
                 console.log(result);
             }
         });
+        clearProposals();
+        populateProposals();
+        menu.openProposalsMenu();
+
     }
 
 }
