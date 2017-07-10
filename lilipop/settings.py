@@ -27,7 +27,7 @@ SECRET_KEY = '2jgq=l*s#i3#^(f5o2glu31o$l*zeo_7*3v#(mjz)#!h+^avm3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [u'37.59.93.6']
+ALLOWED_HOSTS = [u'154.16.17.235']
 
 
 # Application definition
@@ -137,7 +137,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = "var/www/static"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
