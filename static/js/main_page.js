@@ -664,11 +664,11 @@ function addMarkerListeners(marker) {
                     var contentString;
                     if (event_obj.length > 0) {
                         contentString = '<div>'
-                        + '<img src="'
-                        + pathName
-                        + '/media/' + event_obj[0].fields.image + '" style="width: 220px; height: 220px; margin-left: 25px; display: block"/>'
-                        + '<h1 style="width: 220px; text-align: center; margin-left: 23px; margin-top: 20px">' + event_obj[0].fields.title + '</h1>'
-                        + '</div>'
+                            + '<img src="'
+                            + pathName
+                            + '/media/' + event_obj[0].fields.image + '" style="width: 220px; height: 220px; margin-left: 25px; display: block"/>'
+                            + '<h1 style="width: 220px; text-align: center; margin-left: 23px; margin-top: 20px">' + event_obj[0].fields.title + '</h1>'
+                            + '</div>'
                     } else {
                         if (result['lang'] == 'en')
                             contentString = '<h2>No event for now</h2>';
@@ -1056,6 +1056,9 @@ function hideError(element) {
 
 function showInvalidUsernameOrPassword() {
     var form = document.getElementsByClassName('login-form')[0];
+    if (form.chilren[0].getAttribute('class') == 'invalidUserPassMessage') {
+        return;
+    }
     var errorMessage = document.createElement('div');
     errorMessage.innerHTML = 'Username or password is invalid';
     showError(form.parentNode);
