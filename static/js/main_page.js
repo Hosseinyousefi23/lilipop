@@ -1056,7 +1056,7 @@ function hideError(element) {
 
 function showInvalidUsernameOrPassword() {
     var form = document.getElementsByClassName('login-form')[0];
-    if (form.chilren[0].getAttribute('class') == 'invalidUserPassMessage') {
+    if (form.children[0].className == 'invalidUserPassMessage') {
         return;
     }
     var errorMessage = document.createElement('div');
