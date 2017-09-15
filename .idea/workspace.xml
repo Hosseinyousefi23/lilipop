@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="8d4aab14-a526-471c-901c-f5de5c40bf25" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lilipop/settings.py" afterPath="$PROJECT_DIR$/lilipop/settings.py" />
     </list>
     <ignored path="lilipop.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -787,7 +786,14 @@
       <option name="project" value="LOCAL" />
       <updated>1503667549205</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="changed ip">
+      <created>1505486124161</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1505486124161</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -861,7 +867,8 @@
     <MESSAGE value="changed env" />
     <MESSAGE value="changed settings" />
     <MESSAGE value="fixed bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed bug" />
+    <MESSAGE value="changed ip" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed ip" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
