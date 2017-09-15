@@ -25,7 +25,7 @@ SECRET_KEY = '2jgq=l*s#i3#^(f5o2glu31o$l*zeo_7*3v#(mjz)#!h+^avm3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [u'154.16.17.235', u'bluedirt.ir', u'www.bluedirt.ir']
+ALLOWED_HOSTS = [u'94.130.126.77', u'bluedirt.ir', u'www.bluedirt.ir']
 
 # Application definition
 
